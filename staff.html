@@ -149,19 +149,9 @@
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="staff.js"></script>
 <script>
-const STAFF = {
-  budi:   {pass:'123', name:'Budi Santoso', role:'driver'},
-  agus:   {pass:'123', name:'Agus Pratama', role:'driver'},
-  sari:   {pass:'123', name:'Sari Wulan',   role:'operator'},
-  dewi:   {pass:'123', name:'Dewi Lestari', role:'operator'},
-  monitor:{pass:'123', name:'Monitor Outlet', role:'monitor'}
-};
-const OUTLET_NAME = 'Outlet Merdeka';
-let session = null;
-let driverTab = 'pickup';
-
-function esc(s){ return String(s||'').replace(/[<>&"]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+void 0;
 function fmt(f){ return String(f).replace('.', ','); }
 function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',1700); }
 function timeAgo(ts){ const m=Math.floor((Date.now()-ts)/60000); return m<1?'baru saja':m+' menit lalu'; }
