@@ -25,10 +25,12 @@
   .topbar .back{width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0;border:none;cursor:pointer;}
   .topbar .ttl{font-size:15px;font-weight:800;color:#111;}
   .topbar .brandrow{display:flex;align-items:center;gap:8px;margin-bottom:6px;position:relative;z-index:2;}
-  .topbar .brandrow img{height:26px;width:26px;border-radius:8px;object-fit:cover;box-shadow:0 3px 8px rgba(0,0,0,.15);}
-  .topbar .brandrow span{font-size:11px;font-weight:800;color:#111;letter-spacing:.3px;}
-  .topbar .brandrow .profbtn{margin-left:auto;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.1);border:none;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-  .profbtn{width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.1);border:none;font-size:15px;cursor:pointer;}
+  .topbar .brandrow img{height:26px;width:26px;border-radius:8px;object-fit:cover;box-shadow:0 3px 8px rgba(0,0,0,.15);flex-shrink:0;}
+  .topbar .brandrow span{font-size:12px;font-weight:800;color:#111;letter-spacing:.3px;line-height:1;}
+  .topbar .brandrow .profbtn{margin-left:auto;width:34px;height:34px;border-radius:50%;background:#111;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;box-shadow:0 3px 8px rgba(0,0,0,.18);}
+  .topbar .brandrow .profbtn svg{width:18px;height:18px;}
+  .profbtn{width:34px;height:34px;border-radius:50%;background:#111;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
+  .profbtn svg{width:18px;height:18px;}
 
   .profhead{text-align:center;padding:10px 0 18px;}
   .profav{width:70px;height:70px;border-radius:50%;background:var(--y);color:#111;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;margin:0 auto 10px;box-shadow:0 4px 14px rgba(0,0,0,.12);}
@@ -177,7 +179,7 @@
   <!-- HOME -->
   <div class="screen" data-id="home">
     <div class="topbar">
-      <div class="brandrow"><img src="logo.jpg" alt="logo"><span>MR SPIN LAUNDRY</span><button class="profbtn" onclick="goto('profile')">👤</button></div>
+      <div class="brandrow"><img src="logo.jpg" alt="logo"><span>MR SPIN LAUNDRY</span><button class="profbtn" onclick="goto('profile')"><svg viewBox="0 0 24 24" fill="#FFC400"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-4 0-9 2-9 6v2h18v-2c0-4-5-6-9-6z"/></svg></button></div>
       <div class="hi" id="homeOutletHi">📍 Pilih outlet terdekat</div>
       <div class="nm" id="homeGreeting">Halo 👋</div>
       <div class="search">🔍 Cari layanan laundry…</div>
@@ -343,7 +345,7 @@
 
   <!-- FRANCHISE HOME -->
   <div class="screen" data-id="franchise">
-    <div class="topbar"><div class="row1"><div class="ttl">🤝 Franchise</div><button class="profbtn" style="margin-left:auto" onclick="goto('profile')">👤</button></div></div>
+    <div class="topbar"><div class="row1"><div class="ttl">🤝 Franchise</div><button class="profbtn" style="margin-left:auto" onclick="goto('profile')"><svg viewBox="0 0 24 24" fill="#FFC400"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-4 0-9 2-9 6v2h18v-2c0-4-5-6-9-6z"/></svg></button></div></div>
     <div class="body">
       <div class="fr-hero">
         <div class="badge">PELUANG USAHA</div>
