@@ -71,6 +71,16 @@
   .cta{background:#111;color:var(--y);text-align:center;padding:13px;border-radius:14px;font-weight:800;font-size:13.5px;box-shadow:0 6px 16px rgba(0,0,0,.22);border:none;width:calc(100% - 28px);position:fixed;bottom:12px;max-width:362px;cursor:pointer;}
   .cta:active{transform:scale(.98);}
   .cta:disabled{opacity:.45;pointer-events:none;}
+  .cta.ghost{background:var(--yl);color:#8a6d00;box-shadow:none;border:1.5px solid var(--y);}
+
+  .welcome{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 24px;min-height:100vh;background:linear-gradient(165deg,var(--y) 0%,#ffd84d 45%,var(--bg) 45%,var(--bg) 100%);}
+  .welcome .wlogo{width:88px;height:88px;border-radius:22px;object-fit:cover;box-shadow:0 10px 28px rgba(0,0,0,.22);margin-bottom:18px;}
+  .welcome .wtitle{font-size:22px;font-weight:800;color:#111;letter-spacing:.5px;}
+  .welcome .wsub{font-size:13px;color:#555;margin:8px 0 30px;line-height:1.6;}
+  .welcome .cta{max-width:340px;}
+  .welcome .wstaff{margin-top:22px;font-size:12.5px;font-weight:700;color:var(--gray);cursor:pointer;text-decoration:underline;}
+  .forgot{text-align:right;font-size:12px;color:var(--gray);font-weight:600;margin:-4px 2px 12px;cursor:pointer;}
+  .switchauth{text-align:center;font-size:13px;color:var(--gray);padding:2px 0 20px;cursor:pointer;} .switchauth b{color:#111;}
 
   /* weight screen */
   .wcard{background:#fff;border-radius:18px;padding:24px 16px;border:1px solid var(--line);text-align:center;margin-bottom:16px;}
@@ -161,11 +171,39 @@
 <body>
 <div id="app">
 
-  <!-- REGISTER -->
-  <div class="screen active" data-id="register">
+  <!-- WELCOME (Login / Daftar) -->
+  <div class="screen active" data-id="welcome">
+    <div class="welcome">
+      <img src="logo.jpg" class="wlogo" alt="logo" onerror="this.style.display='none'">
+      <h1 class="wtitle">MR SPIN LAUNDRY</h1>
+      <p class="wsub">Laundry antar-jemput, cepat & bersih.<br>Masuk atau daftar dulu yuk.</p>
+      <button class="cta" style="position:static;width:100%;margin:0 0 12px" onclick="goto('login')">Masuk</button>
+      <button class="cta ghost" style="position:static;width:100%;margin:0" onclick="goto('register')">Daftar Akun Baru</button>
+      <div class="wstaff" onclick="location.href='staff.html'">👷 Login sebagai Karyawan / Staff</div>
+    </div>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="screen" data-id="login">
     <div class="topbar" style="padding-bottom:20px">
-      <div class="brandrow"><img src="logo.jpg" alt="logo"><span>MR SPIN LAUNDRY</span></div>
-      <div class="nm">Daftar Akun Baru</div>
+      <div class="row1"><button class="back" onclick="back()">←</button><div class="ttl">Masuk Akun</div></div>
+      <div class="nm" style="margin-top:8px">Selamat datang kembali 👋</div>
+    </div>
+    <div class="body">
+      <div class="field"><label>No. WhatsApp</label><input id="lWa" placeholder="08xx-xxxx-xxxx"></div>
+      <div class="field"><label>Password</label><input id="lPass" type="password" placeholder="••••••"></div>
+      <div class="forgot">Lupa password?</div>
+      <div class="banner"><b>Belum punya akun?</b><small>Klik "Daftar" di bawah untuk buat akun baru</small></div>
+    </div>
+    <button class="cta" style="position:static;width:calc(100% - 28px);margin:4px auto 8px;display:block" onclick="submitLogin()">Masuk</button>
+    <div class="switchauth" onclick="stack=['welcome'];render('register')">Belum punya akun? <b>Daftar</b></div>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="screen" data-id="register">
+    <div class="topbar" style="padding-bottom:20px">
+      <div class="row1"><button class="back" onclick="back()">←</button><div class="ttl">Daftar Akun</div></div>
+      <div class="nm" style="margin-top:8px">Buat akun baru</div>
     </div>
     <div class="body">
       <div class="field"><label>Nama Lengkap</label><input id="rName" placeholder="Nama lengkap Anda"></div>
@@ -173,7 +211,8 @@
       <div class="field"><label>Email</label><input id="rEmail" placeholder="email@contoh.com"></div>
       <div class="banner"><b>Gratis Ongkir Jemput Pertama</b><small>Khusus member baru terdaftar</small></div>
     </div>
-    <button class="cta" onclick="submitRegister()">Daftar & Lanjut</button>
+    <button class="cta" style="position:static;width:calc(100% - 28px);margin:4px auto 8px;display:block" onclick="submitRegister()">Daftar & Lanjut</button>
+    <div class="switchauth" onclick="stack=['welcome'];render('login')">Sudah punya akun? <b>Masuk</b></div>
   </div>
 
   <!-- HOME -->
@@ -488,13 +527,32 @@ function doLogout(){
   document.getElementById('rName').value='';
   document.getElementById('rWa').value='';
   document.getElementById('rEmail').value='';
-  stack=[]; render('register');
+  stack=[]; render('welcome');
   showToast('Berhasil keluar akun');
 }
 function back(){ const prev = stack.pop(); render(prev || 'home'); }
 function currentId(){ return document.querySelector('.screen.active').dataset.id; }
 function goHome(){ stack=[]; render('home'); }
 function goFranchiseHome(){ stack=[]; render('franchise'); }
+
+// LOGIN
+function submitLogin(){
+  const wa = document.getElementById('lWa').value.trim();
+  const pass = document.getElementById('lPass').value.trim();
+  if(!wa || !pass){ showToast('Isi WhatsApp & password dulu'); return; }
+  // Demo: cari akun tersimpan atau langsung masuk
+  let acc = null;
+  try{ acc = JSON.parse(localStorage.getItem('mrspin_customer')||'null'); }catch(e){}
+  if(acc && acc.wa){
+    state.name = acc.name; state.wa = acc.wa; state.email = acc.email||'';
+  } else {
+    // belum pernah daftar di device ini — tetap izinkan masuk (demo), pakai WA sbg nama
+    state.name = 'Member'; state.wa = wa;
+  }
+  document.getElementById('homeGreeting').textContent = 'Halo, ' + (state.name.split(' ')[0]) + ' 👋';
+  stack=[]; render('home');
+  showToast('Berhasil masuk');
+}
 
 // REGISTER
 function submitRegister(){
@@ -503,6 +561,7 @@ function submitRegister(){
   const email = document.getElementById('rEmail').value.trim();
   if(!name || !wa){ showToast('Nama & WhatsApp wajib diisi'); return; }
   state.name = name; state.wa = wa; state.email = email;
+  try{ localStorage.setItem('mrspin_customer', JSON.stringify({name,wa,email})); }catch(e){}
   document.getElementById('homeGreeting').textContent = 'Halo, ' + name.split(' ')[0] + ' 👋';
   stack=[]; render('home');
 }
