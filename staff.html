@@ -170,10 +170,10 @@ function timeAgo(ts){ const m=Math.floor((Date.now()-ts)/60000); return m<1?'bar
 function doLogin(){
   const u = document.getElementById('loginUser').value.trim().toLowerCase();
   const p = document.getElementById('loginPass').value.trim();
-  const wantRole = document.getElementById('loginRole').value;
+  if(!u || !p){ showToast('Isi username & password dulu'); return; }
   const acc = STAFF[u];
   if(!acc || acc.pass !== p){ showToast('Username / password salah'); return; }
-  if(acc.role !== wantRole){ showToast('Role tidak cocok — pilih "'+roleLabel(acc.role)+'"'); return; }
+  // Role otomatis dari akun (dropdown cuma info, gak wajib cocok)
   session = {user:u, name:acc.name, role:acc.role};
   try{ localStorage.setItem('mrspin_staff', JSON.stringify(session)); }catch(e){}
   enterApp();
