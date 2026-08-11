@@ -112,7 +112,7 @@
       <option value="operator">🏪 Operator Outlet</option>
       <option value="monitor">📺 Monitor Display</option>
     </select>
-    <button class="btn" onclick="doLogin()">Masuk</button>
+    <button class="btn" id="btnLogin" type="button">Masuk</button>
     <div class="hint">
       <b>Akun demo:</b><br>
       Driver → <b>budi</b> / 123<br>
@@ -303,10 +303,23 @@ function refreshCurrent(){
   else if(session.role==='monitor') renderMonitor();
 }
 
+/* ---------- expose handlers to global (GitHub Pages onclick safety) ---------- */
+window.doLogin=doLogin; window.doLogout=doLogout; window.setDriverTab=setDriverTab;
+window.takePhoto=takePhoto; window.doPickup=doPickup; window.doDeliver=doDeliver;
+window.startWash=startWash; window.finishWash=finishWash;
+
 /* ---------- BOOT ---------- */
-Store.seed();
-Store.subscribe(refreshCurrent);
-try{
-  const saved = JSON.parse(localStorage.getItem('mrspin_staff')||'null');
-  if(saved && STAFF[saved.user]){ session = saved; enterApp(); }
-}catch(e){}
+function boot(){
+  try{ if(typeof Store!=='undefined' && Store.seed){ Store.seed(); Store.subscribe(refreshCurrent); } }catch(e){ console.error('store init',e); }
+  // Bind login button (addEventListener, tidak bergantung onclick global)
+  var b=document.getElementById('btnLogin');
+  if(b) b.addEventListener('click', doLogin);
+  // Enter key di password submit
+  var pp=document.getElementById('loginPass');
+  if(pp) pp.addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+  try{
+    const saved = JSON.parse(localStorage.getItem('mrspin_staff')||'null');
+    if(saved && STAFF[saved.user]){ session = saved; enterApp(); }
+  }catch(e){}
+}
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', boot); } else { boot(); }
