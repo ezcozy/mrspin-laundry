@@ -27,6 +27,17 @@
   .topbar .brandrow{display:flex;align-items:center;gap:8px;margin-bottom:6px;position:relative;z-index:2;}
   .topbar .brandrow img{height:26px;width:26px;border-radius:8px;object-fit:cover;box-shadow:0 3px 8px rgba(0,0,0,.15);}
   .topbar .brandrow span{font-size:11px;font-weight:800;color:#111;letter-spacing:.3px;}
+  .topbar .brandrow .profbtn{margin-left:auto;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.1);border:none;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .profbtn{width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.1);border:none;font-size:15px;cursor:pointer;}
+
+  .profhead{text-align:center;padding:10px 0 18px;}
+  .profav{width:70px;height:70px;border-radius:50%;background:var(--y);color:#111;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;margin:0 auto 10px;box-shadow:0 4px 14px rgba(0,0,0,.12);}
+  .profnm{font-size:17px;font-weight:800;} .profsub{font-size:12px;color:var(--gray);margin-top:2px;}
+  .profrow{display:flex;justify-content:space-between;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:8px;font-size:13px;}
+  .profrow span{color:var(--gray);} .profrow b{color:#111;}
+  .profmenu{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:8px;font-size:13.5px;font-weight:600;cursor:pointer;}
+  .profmenu b{color:var(--gray);font-weight:700;} .profmenu:active{background:var(--yl);}
+  .profmenu.logout{color:#c0392b;} .profmenu.logout b{color:#c0392b;}
   .topbar .hi{font-size:10px;color:#3a3a3a;margin-bottom:2px;position:relative;z-index:2;}
   .topbar .nm{font-size:16px;font-weight:800;position:relative;z-index:2;}
   .search{background:#fff;border-radius:12px;padding:9px 12px;margin-top:10px;display:flex;align-items:center;gap:7px;color:var(--gray);font-size:12px;position:relative;z-index:2;}
@@ -166,7 +177,7 @@
   <!-- HOME -->
   <div class="screen" data-id="home">
     <div class="topbar">
-      <div class="brandrow"><img src="logo.jpg" alt="logo"><span>MR SPIN LAUNDRY</span></div>
+      <div class="brandrow"><img src="logo.jpg" alt="logo"><span>MR SPIN LAUNDRY</span><button class="profbtn" onclick="goto('profile')">👤</button></div>
       <div class="hi" id="homeOutletHi">📍 Pilih outlet terdekat</div>
       <div class="nm" id="homeGreeting">Halo 👋</div>
       <div class="search">🔍 Cari layanan laundry…</div>
@@ -272,9 +283,39 @@
     <div class="body" id="paymentBody"></div>
   </div>
 
+  <!-- PROFILE -->
+  <div class="screen" data-id="profile">
+    <div class="topbar"><div class="row1"><button class="back" onclick="back()">←</button><div class="ttl">Profil Akun</div></div></div>
+    <div class="body">
+      <div class="profhead">
+        <div class="profav" id="profAv">A</div>
+        <div class="profnm" id="profName">Customer</div>
+        <div class="profsub" id="profWa">-</div>
+      </div>
+      <div class="sectitle">Data Akun</div>
+      <div class="profrow"><span>👤 Nama</span><b id="pvName">-</b></div>
+      <div class="profrow"><span>📱 WhatsApp</span><b id="pvWa">-</b></div>
+      <div class="profrow"><span>✉️ Email</span><b id="pvEmail">-</b></div>
+      <div class="profrow"><span>📍 Outlet Langganan</span><b id="pvOutlet">-</b></div>
+      <div class="sectitle" style="margin-top:16px">Aktivitas</div>
+      <div class="profmenu" onclick="openMyOrders()"><span>📦 Pesanan Saya</span><b id="pvOrders">0</b></div>
+      <div class="profmenu"><span>🎟️ Voucher & Promo</span><b>2</b></div>
+      <div class="profmenu"><span>💳 Metode Pembayaran</span><b>QRIS</b></div>
+      <div class="profmenu"><span>⚙️ Pengaturan</span><b>›</b></div>
+      <div class="profmenu"><span>❓ Bantuan</span><b>›</b></div>
+      <div class="profmenu logout" onclick="doLogout()"><span>🚪 Keluar Akun</span><b>›</b></div>
+    </div>
+  </div>
+
+  <!-- MY ORDERS -->
+  <div class="screen" data-id="myorders">
+    <div class="topbar"><div class="row1"><button class="back" onclick="back()">←</button><div class="ttl">Pesanan Saya</div></div></div>
+    <div class="body" id="myOrdersList"></div>
+  </div>
+
   <!-- E-BILLING -->
   <div class="screen" data-id="ebilling">
-    <div class="topbar"><div class="row1"><div class="ttl">E-Billing</div></div></div>
+    <div class="topbar"><div class="row1"><button class="back" onclick="back()">←</button><div class="ttl">E-Billing</div></div></div>
     <div class="body">
       <div class="success" style="padding:24px 4px">
         <div class="ic">✅</div>
@@ -288,7 +329,7 @@
 
   <!-- TRACKING -->
   <div class="screen" data-id="tracking">
-    <div class="topbar"><div class="row1"><div class="ttl">Lacak Pesanan</div></div></div>
+    <div class="topbar"><div class="row1"><button class="back" onclick="back()">←</button><div class="ttl">Lacak Pesanan</div></div></div>
     <div class="body">
       <div class="orderid">Pesanan <b id="orderIdTxt">#SPIN0000</b></div>
       <div class="track" id="trackSteps"></div>
@@ -302,7 +343,7 @@
 
   <!-- FRANCHISE HOME -->
   <div class="screen" data-id="franchise">
-    <div class="topbar"><div class="row1"><div class="ttl">🤝 Franchise</div></div></div>
+    <div class="topbar"><div class="row1"><div class="ttl">🤝 Franchise</div><button class="profbtn" style="margin-left:auto" onclick="goto('profile')">👤</button></div></div>
     <div class="body">
       <div class="fr-hero">
         <div class="badge">PELUANG USAHA</div>
@@ -406,9 +447,48 @@ function render(id){
   if(id==='checkout') renderCheckout();
   if(id==='packages') renderPackages();
   if(id==='form') renderForm();
+  if(id==='profile') renderProfile();
+  if(id==='myorders') renderMyOrders();
 }
 
 function goto(id){ stack.push(currentId()); render(id); }
+
+function renderProfile(){
+  const nm = state.name || 'Customer';
+  document.getElementById('profAv').textContent = (nm[0]||'A').toUpperCase();
+  document.getElementById('profName').textContent = nm;
+  document.getElementById('profWa').textContent = state.wa || '-';
+  document.getElementById('pvName').textContent = nm;
+  document.getElementById('pvWa').textContent = state.wa || '-';
+  document.getElementById('pvEmail').textContent = state.email || '-';
+  const o = OUTLETS.find(x=>x.id===state.outlet) || OUTLETS[0];
+  document.getElementById('pvOutlet').textContent = o.name;
+  const mine = window.Store ? Store.getAll().filter(x=>x.phone===(state.wa||'')||x.customer===nm) : [];
+  document.getElementById('pvOrders').textContent = mine.length;
+}
+function openMyOrders(){ goto('myorders'); renderMyOrders(); }
+function renderMyOrders(){
+  const nm = state.name || 'Customer';
+  const mine = window.Store ? Store.getAll().filter(x=>x.phone===(state.wa||'')||x.customer===nm) : [];
+  const el = document.getElementById('myOrdersList');
+  if(!mine.length){ el.innerHTML = '<div class="success" style="padding:50px 10px"><div class="ic">📦</div><p>Belum ada pesanan.<br>Yuk pesan laundry pertamamu!</p></div>'; return; }
+  el.innerHTML = mine.map(o=>`
+    <div class="listitem" style="cursor:pointer" onclick="openTrackOrder('${o.id}')">
+      <div class="radio" style="background:var(--yl);border:none">🧺</div>
+      <div class="tx"><b>#${o.id} • ${esc(o.service)}</b><small>${Store.STATUS_LABEL[o.status]||o.status} • ${rp(o.price)}</small></div>
+      <div class="pr">›</div>
+    </div>`).join('');
+}
+function openTrackOrder(id){ orderId = id; goto('tracking'); startTracking(); }
+function doLogout(){
+  if(!confirm('Keluar dari akun ini?')) return;
+  state.name=''; state.wa=''; state.email='';
+  document.getElementById('rName').value='';
+  document.getElementById('rWa').value='';
+  document.getElementById('rEmail').value='';
+  stack=[]; render('register');
+  showToast('Berhasil keluar akun');
+}
 function back(){ const prev = stack.pop(); render(prev || 'home'); }
 function currentId(){ return document.querySelector('.screen.active').dataset.id; }
 function goHome(){ stack=[]; render('home'); }
