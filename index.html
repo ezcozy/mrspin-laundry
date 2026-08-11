@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mr Spin Laundry — Webapp Mockup</title>
+<style>
+  :root{
+    --green:#FFC400; --green-d:#0f0f0f; --green-l:#fff7d6;
+    --ink:#1a1a1a; --gray:#8a8577; --line:#eee9d8; --bg:#faf7ef;
+    --amber:#111;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body{background:#f0ece0;color:var(--ink);}
+  .page{width:1180px;margin:0 auto;padding:48px 40px;background:#f0ece0;}
+  .cover{
+    background:linear-gradient(135deg,#FFC400 0%,#FFD84D 100%);
+    color:#111;border-radius:28px;padding:64px 56px;margin-bottom:56px;
+    position:relative;overflow:hidden;
+  }
+  .cover::after{content:"";position:absolute;right:-80px;top:-80px;width:340px;height:340px;background:rgba(0,0,0,.06);border-radius:50%;}
+  .cover::before{content:"";position:absolute;right:60px;bottom:-120px;width:260px;height:260px;background:rgba(0,0,0,.04);border-radius:50%;}
+  .logo{display:flex;align-items:center;gap:16px;margin-bottom:8px;position:relative;z-index:2;}
+  .logo img{height:78px;width:auto;border-radius:16px;box-shadow:0 8px 22px rgba(0,0,0,.18);}
+  .cover h1{font-size:46px;font-weight:800;line-height:1.1;margin:22px 0 14px;max-width:640px;color:#111;position:relative;z-index:2;}
+  .cover p{font-size:19px;opacity:.85;max-width:560px;line-height:1.5;color:#222;position:relative;z-index:2;}
+  .cover .tags{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap;position:relative;z-index:2;}
+  .cover .tag{background:#111;color:#FFC400;padding:9px 18px;border-radius:30px;font-size:14px;font-weight:700;}
+
+  .sec-title{font-size:15px;font-weight:800;letter-spacing:2px;color:var(--green-d);text-transform:uppercase;margin:0 0 6px;}
+  .sec-sub{font-size:15px;color:var(--gray);margin-bottom:26px;}
+  .row{display:flex;gap:28px;flex-wrap:wrap;justify-content:center;margin-bottom:56px;}
+
+  /* phone frame */
+  .phone{width:320px;background:#fff;border-radius:38px;padding:12px;box-shadow:0 22px 50px rgba(0,60,25,.16);border:1px solid #dfe8e2;}
+  .screen{background:var(--bg);border-radius:28px;overflow:hidden;height:660px;display:flex;flex-direction:column;position:relative;}
+  .notch{height:26px;display:flex;align-items:center;justify-content:center;background:#fff;}
+  .notch .bar{width:110px;height:6px;background:#d9e1db;border-radius:6px;}
+  .cap{text-align:center;font-size:14px;font-weight:700;color:var(--ink);margin-top:14px;}
+  .cap span{display:block;font-size:12px;color:var(--gray);font-weight:500;margin-top:2px;}
+
+  .sbar{display:flex;justify-content:space-between;padding:8px 18px 2px;font-size:11px;font-weight:700;color:var(--ink);}
+  .topgreen{background:#111;color:#FFC400;padding:14px 18px 18px;}
+  .topgreen .hi{font-size:12px;opacity:.9;}
+  .topgreen .nm{font-size:17px;font-weight:800;margin-top:1px;}
+  .search{background:#fff;border-radius:14px;padding:11px 14px;margin-top:12px;display:flex;align-items:center;gap:8px;color:var(--gray);font-size:13px;}
+  .courier .av,.svc .ic,.listitem .ic{background:var(--green-l);}
+  .body{padding:16px 16px 18px;overflow:hidden;flex:1;}
+  .banner{background:linear-gradient(120deg,#111,#333);color:#FFC400;border-radius:16px;padding:16px;margin-bottom:16px;position:relative;overflow:hidden;}
+  .banner b{font-size:16px;display:block;}
+  .banner small{font-size:12px;opacity:.92;}
+  .banner .pill{position:absolute;right:12px;top:12px;background:#FFC400;color:#111;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .svc{background:#fff;border-radius:16px;padding:14px;text-align:center;border:1px solid var(--line);}
+  .svc .ic{width:46px;height:46px;border-radius:14px;background:var(--green-l);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 8px;}
+  .svc .pic{width:100%;height:78px;border-radius:12px;object-fit:cover;margin-bottom:8px;display:block;}
+  .listitem .pic{width:52px;height:52px;border-radius:12px;object-fit:cover;flex-shrink:0;}
+  .svc b{font-size:13px;display:block;}
+  .svc small{font-size:11px;color:var(--gray);}
+  .svc .pr{color:#111;font-weight:800;font-size:13px;margin-top:5px;background:var(--green-l);display:inline-block;padding:2px 8px;border-radius:8px;}
+  .sectitle{font-weight:800;font-size:14px;margin:14px 0 10px;display:flex;justify-content:space-between;align-items:center;}
+  .sectitle a{color:var(--green-d);font-size:12px;font-weight:700;}
+
+  .listitem{display:flex;gap:12px;background:#fff;border-radius:14px;padding:12px;margin-bottom:10px;border:1px solid var(--line);align-items:center;}
+  .listitem .ic{width:44px;height:44px;border-radius:12px;background:var(--green-l);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+  .listitem .tx{flex:1;}
+  .listitem .tx b{font-size:13px;}
+  .listitem .tx small{font-size:11px;color:var(--gray);display:block;}
+  .listitem .pr{color:var(--green-d);font-weight:800;font-size:13px;}
+  .radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--green);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .radio{border-color:#111;}
+  .radio.on{background:#111;border-color:#111;}
+  .radio.on::after{content:"";width:8px;height:8px;background:#FFC400;border-radius:50%;}
+
+  /* weight */
+  .wcard{background:#fff;border-radius:18px;padding:20px 16px;border:1px solid var(--line);text-align:center;margin-bottom:14px;}
+  .wcard .kg{font-size:44px;font-weight:800;color:var(--green-d);line-height:1;}
+  .wcard .kg small{font-size:18px;color:var(--gray);}
+  .stepper{display:flex;align-items:center;justify-content:center;gap:20px;margin:16px 0;}
+  .stepper button{width:44px;height:44px;border-radius:50%;border:none;background:var(--green-l);color:var(--green-d);font-size:24px;font-weight:800;}
+  .stepper .plus{background:#111;color:#FFC400;}
+  .slider{height:8px;background:var(--line);border-radius:8px;position:relative;margin:8px 0 2px;}
+  .slider .fill{position:absolute;left:0;top:0;height:100%;width:45%;background:#111;border-radius:8px;}
+  .slider .knob{position:absolute;left:45%;top:50%;transform:translate(-50%,-50%);width:22px;height:22px;background:#FFC400;border:3px solid #111;border-radius:50%;}
+  .est{display:flex;justify-content:space-between;font-size:12px;color:var(--gray);}
+
+  .addr{background:#fff;border-radius:14px;padding:13px;border:1px solid var(--line);margin-bottom:11px;display:flex;gap:11px;align-items:flex-start;}
+  .addr .dot{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .addr .p{background:var(--green-l);} .addr .d{background:#efe9d8;}
+  .addr .tx b{font-size:13px;} .addr .tx small{font-size:11px;color:var(--gray);display:block;line-height:1.4;}
+  .map{height:120px;border-radius:14px;background:linear-gradient(135deg,#fff2b8,#ffe27a);margin-bottom:14px;position:relative;overflow:hidden;}
+  .map .road{position:absolute;height:5px;background:#fff;opacity:.7;}
+  .map .pin{position:absolute;font-size:26px;}
+  .timeslot{display:flex;gap:8px;overflow:hidden;margin-top:6px;}
+  .chip{background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:7px 13px;font-size:11px;font-weight:700;color:var(--gray);white-space:nowrap;}
+  .chip.on{background:#111;border-color:#111;color:#FFC400;}
+
+  .sumrow{display:flex;justify-content:space-between;font-size:13px;padding:8px 0;color:var(--ink);}
+  .sumrow small{color:var(--gray);}
+  .sumline{border-top:1px dashed var(--line);margin:6px 0;}
+  .total{display:flex;justify-content:space-between;font-size:17px;font-weight:800;color:#111;padding-top:8px;}
+  .paycard{background:#fff;border-radius:14px;padding:13px;border:1px solid var(--line);display:flex;gap:11px;align-items:center;margin-bottom:10px;}
+  .paycard .ic{width:36px;height:36px;border-radius:10px;background:var(--green-l);display:flex;align-items:center;justify-content:center;font-size:18px;}
+  .paycard b{font-size:13px;flex:1;}
+
+  .cta{background:#111;color:#FFC400;text-align:center;padding:15px;border-radius:16px;font-weight:800;font-size:15px;margin:auto 16px 16px;box-shadow:0 8px 20px rgba(0,0,0,.25);}
+  .footcta{padding:0;}
+
+  /* tracking */
+  .track{padding:4px 2px;}
+  .tstep{display:flex;gap:14px;position:relative;padding-bottom:22px;}
+  .tstep::before{content:"";position:absolute;left:15px;top:32px;bottom:-4px;width:3px;background:var(--line);}
+  .tstep:last-child::before{display:none;}
+  .tstep.done::before{background:var(--green);}
+  .tdot{width:32px;height:32px;border-radius:50%;background:var(--line);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;z-index:1;}
+  .tstep.done .tdot{background:#111;color:#FFC400;}
+  .tstep.now .tdot{background:#FFC400;color:#111;box-shadow:0 0 0 5px #fff2b8;}
+  .tstep .tx b{font-size:13px;} .tstep .tx small{font-size:11px;color:var(--gray);display:block;}
+  .courier{background:#fff;border-radius:16px;padding:14px;border:1px solid var(--line);display:flex;gap:12px;align-items:center;margin-top:6px;}
+  .courier .av{width:44px;height:44px;border-radius:50%;background:var(--green-l);display:flex;align-items:center;justify-content:center;font-size:22px;}
+  .courier b{font-size:13px;} .courier small{font-size:11px;color:var(--gray);display:block;}
+  .courier .call{margin-left:auto;width:38px;height:38px;border-radius:50%;background:#111;color:#FFC400;display:flex;align-items:center;justify-content:center;font-size:18px;}
+
+  /* franchise */
+  .fr-hero{background:linear-gradient(135deg,#FFC400,#FFD84D);color:#111;border-radius:16px;padding:20px 16px;margin-bottom:14px;text-align:center;}
+  .fr-hero b{font-size:20px;display:block;} .fr-hero small{font-size:12px;opacity:.75;display:block;margin-top:4px;}
+  .fr-hero .badge{display:inline-block;background:#111;color:#FFC400;font-size:11px;font-weight:800;padding:5px 12px;border-radius:20px;margin-bottom:10px;}
+  .pkg{background:#fff;border-radius:16px;padding:16px;border:1px solid var(--line);margin-bottom:12px;position:relative;}
+  .pkg.hot{border:2px solid #FFC400;}
+  .pkg .rib{position:absolute;right:12px;top:-10px;background:#111;color:#FFC400;font-size:10px;font-weight:800;padding:4px 10px;border-radius:12px;}
+  .pkg .nm{font-weight:800;font-size:15px;} .pkg .pr{color:#111;font-weight:800;font-size:20px;margin:4px 0 8px;}
+  .pkg ul{list-style:none;font-size:12px;color:var(--ink);}
+  .pkg li{padding:4px 0;display:flex;gap:8px;} .pkg li::before{content:"✓";color:#d4a000;font-weight:800;}
+  .flabel{font-weight:800;font-size:14px;margin:2px 0 10px;}
+
+  .note{text-align:center;color:var(--gray);font-size:13px;margin-top:30px;padding-top:24px;border-top:1px solid #cdd8d1;}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="logo"><img src="logo.jpg" alt="Mr Spin Laundry Express"></div>
+    <h1>Laundry Kiloan, Jemput-Antar Semudah Pesan Grab</h1>
+    <p>Webapp customer untuk laundry kiloan: pilih layanan, atur berat, jadwalkan jemput & antar, bayar online, lacak real-time. Plus program kemitraan franchise.</p>
+    <div class="tags">
+      <div class="tag">📦 Jemput & Antar</div>
+      <div class="tag">⚖️ Bayar Per Kilo</div>
+      <div class="tag">📍 Live Tracking</div>
+      <div class="tag">🤝 Franchise</div>
+    </div>
+  </div>
+
+  <!-- FLOW 1 -->
+  <div style="text-align:center">
+    <p class="sec-title">Alur Pemesanan Customer</p>
+    <p class="sec-sub">Dari buka app sampai cucian diantar balik — 6 langkah</p>
+  </div>
+
+  <div class="row">
+
+    <!-- HOME -->
+    <div>
+    <div class="phone"><div class="screen">
+      <div class="sbar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="topgreen">
+        <div class="hi">📍 Antar ke • Jl. Merdeka No.12</div>
+        <div class="nm">Halo, Ihza 👋</div>
+        <div class="search">🔍 Cari layanan laundry…</div>
+      </div>
+      <div class="body">
+        <div class="banner"><span class="pill">HEMAT 30%</span><b>Gratis Ongkir Jemput</b><small>Min. 3kg • s/d 31 Juli</small></div>
+        <div class="sectitle">Layanan Populer</div>
+        <div class="grid2">
+          <div class="svc"><img class="pic" data-img="cuci-kering"><b>Cuci Kering</b><div class="pr">Rp 5.000/kg</div></div>
+          <div class="svc"><img class="pic" data-img="cuci-setrika"><b>Cuci Setrika</b><div class="pr">Rp 7.000/kg</div></div>
+          <div class="svc"><img class="pic" data-img="setrika"><b>Setrika Saja</b><div class="pr">Rp 4.000/kg</div></div>
+          <div class="svc"><img class="pic" data-img="express"><b>Express 6 Jam</b><div class="pr">Rp 12.000/kg</div></div>
+        </div>
+      </div>
+    </div></div>
+    <div class="cap">1. Home<span>Pilih layanan populer</span></div>
+    </div>
+
+    <!-- PILIH LAYANAN -->
+    <div>
+    <div class="phone"><div class="screen">
+      <div class="sbar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="topgreen"><div class="nm">← Pilih Layanan</div></div>
+      <div class="body">
+        <div class="listitem"><img class="pic" data-img="cuci-kering"><div class="tx"><b>Cuci Kering</b><small>Cuci + kering, 2 hari</small></div><div class="pr">5rb<br><span class="radio on"></span></div></div>
+        <div class="listitem"><img class="pic" data-img="cuci-setrika"><div class="tx"><b>Cuci Setrika</b><small>Lengkap + wangi, 2 hari</small></div><div class="radio"></div></div>
+        <div class="listitem"><img class="pic" data-img="setrika"><div class="tx"><b>Setrika Saja</b><small>Rapi siap pakai, 1 hari</small></div><div class="radio"></div></div>
+        <div class="listitem"><img class="pic" data-img="express"><div class="tx"><b>Express 6 Jam</b><small>Kilat prioritas</small></div><div class="radio"></div></div>
+        <div class="listitem"><img class="pic" data-img="bedcover"><div class="tx"><b>Bed Cover & Selimut</b><small>Cuci satuan</small></div><div class="radio"></div></div>
+      </div>
+      <div class="cta">Lanjut — Cuci Kering</div>
+    </div></div>
+    <div class="cap">2. Pilih Layanan<span>Radio select seperti Grab</span></div>
+    </div>
+
+    <!-- BERAT -->
+    <div>
+    <div class="phone"><div class="screen">
+      <div class="sbar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="topgreen"><div class="nm">← Estimasi Berat</div></div>
+      <div class="body">
+        <div class="wcard">
+          <div class="kg">4,5<small> kg</small></div>
+          <div class="stepper"><button>−</button><button class="plus">+</button></div>
+          <div class="slider"><div class="fill"></div><div class="knob"></div></div>
+          <div class="est"><span>1 kg</span><span>10 kg</span></div>
+        </div>
+        <div class="listitem"><div class="ic">💡</div><div class="tx"><b>Estimasi</b><small>Berat final ditimbang saat jemput</small></div></div>
+        <div class="sectitle">Ringkasan Sementara</div>
+        <div class="sumrow"><span>Cuci Kering × 4,5kg</span><b>Rp 22.500</b></div>
+        <div class="sumrow"><span>Ongkir jemput-antar</span><b><small>GRATIS</small></b></div>
+      </div>
+      <div class="cta">Lanjut ke Penjemputan</div>
+    </div></div>
+    <div class="cap">3. Estimasi Berat<span>Slider + stepper kiloan</span></div>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+    <!-- PICKUP -->
+    <div>
+    <div class="phone"><div class="screen">
+      <div class="sbar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="topgreen"><div class="nm">← Jemput & Antar</div></div>
+      <div class="body">
+        <div class="map">
+          <div class="road" style="width:70%;top:40%;left:10%"></div>
+          <div class="road" style="width:5px;height:60%;top:20%;left:45%"></div>
+          <div class="pin" style="top:22%;left:30%">📍</div>
+          <div class="pin" style="top:55%;left:60%">🏠</div>
+        </div>
+        <div class="addr"><div class="dot p">📦</div><div class="tx"><b>Alamat Jemput</b><small>Jl. Merdeka No.12, Kota Jambi</small></div></div>
+        <div class="addr"><div class="dot d">🏠</div><div class="tx"><b>Alamat Antar</b><small>Sama dengan alamat jemput</small></div></div>
+        <div class="sectitle">Jadwal Jemput</div>
+        <div class="timeslot"><div class="chip on">Hari ini 14–16</div><div class="chip">16–18</div><div class="chip">Besok</div></div>
+      </div>
+      <div class="cta">Konfirmasi Jadwal</div>
+    </div></div>
+    <div class="cap">4. Pickup & Delivery<span>Map + jadwal jemput/antar</span></div>
+    </div>
+
+    <!-- CHECKOUT -->
+    <div>
+    <div class="phone"><div class="screen">
+      <div class="sbar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="topgreen"><div class="nm">← Checkout</div></div>
+      <div class="body">
+        <div class="listitem"><div class="ic">👕</div><div class="tx"><b>Cuci Kering</b><small>Estimasi 4,5 kg • 2 hari</small></div></div>
+        <div class="sectitle">Rincian Biaya</div>
+        <div class="sumrow"><span>Subtotal (4,5kg)</span><span>Rp 22.500</span></div>
+        <div class="sumrow"><span>Ongkir jemput-antar</span><span>Rp 0</span></div>
+        <div class="sumrow"><span>Diskon HEMAT30</span><span>− Rp 6.750</span></div>
+        <div class="sumline"></div>
+        <div class="total"><span>Total</span><span>Rp 15.750</span></div>
+        <div class="sectitle" style="margin-top:14px">Metode Bayar</div>
+        <div class="paycard"><div class="ic">💳</div><b>GoPay / OVO / Dana</b><div class="radio on"></div></div>
+        <div class="paycard"><div class="ic">💵</div><b>Bayar di Tempat (COD)</b><div class="radio"></div></div>
+      </div>
+      <div class="cta">Buat Pesanan — Rp 15.750</div>
+    </div></div>
+    <div class="cap">5. Checkout<span>Rincian harga + pembayaran</span></div>
+    </div>
+
+    <!-- TRACKING -->
+    <div>
+    <div class="phone"><div class="screen">
+      <div class="sbar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="topgreen"><div class="nm">Lacak Pesanan #SPIN2048</div></div>
+      <div class="body">
+        <div class="track">
+          <div class="tstep done"><div class="tdot">✓</div><div class="tx"><b>Pesanan Dibuat</b><small>14:02 • Rp 15.750</small></div></div>
+          <div class="tstep done"><div class="tdot">✓</div><div class="tx"><b>Dijemput Kurir</b><small>14:38 • 4,3 kg ditimbang</small></div></div>
+          <div class="tstep now"><div class="tdot">🌀</div><div class="tx"><b>Sedang Dicuci</b><small>Estimasi selesai besok 12:00</small></div></div>
+          <div class="tstep"><div class="tdot">🚚</div><div class="tx"><b>Diantar Balik</b><small>Menunggu</small></div></div>
+          <div class="tstep"><div class="tdot">🏠</div><div class="tx"><b>Selesai</b><small>—</small></div></div>
+        </div>
+        <div class="courier"><div class="av">🧑‍🔧</div><div><b>Budi — Kurir</b><small>B 4521 SPN</small></div><div class="call">📞</div></div>
+      </div>
+      <div class="cta">Hubungi Mr Spin</div>
+    </div></div>
+    <div class="cap">6. Live Tracking<span>Status real-time seperti Grab</span></div>
+    </div>
+
+  </div>
+
+  <!-- FRANCHISE -->
+  <div style="text-align:center">
+    <p class="sec-title">Menu Franchise / Kemitraan</p>
+    <p class="sec-sub">Halaman ajakan buka cabang Mr Spin Laundry</p>
+  </div>
+
+  <div class="row">
+
+    <div>
+    <div class="phone"><div class="screen">
+      <div class="sbar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="topgreen"><div class="nm">🤝 Franchise</div></div>
+      <div class="body">
+        <div class="fr-hero">
+          <div class="badge">PELUANG USAHA</div>
+          <b>Jadi Mitra Mr Spin</b>
+          <small>Balik modal cepat, sistem & app disediakan</small>
+        </div>
+        <div class="grid2">
+          <div class="svc"><div class="ic">💰</div><b>ROI 8 Bln</b><small>Estimasi</small></div>
+          <div class="svc"><div class="ic">📱</div><b>App + POS</b><small>Siap pakai</small></div>
+          <div class="svc"><div class="ic">🎓</div><b>Training</b><small>Gratis</small></div>
+          <div class="svc"><div class="ic">🛠️</div><b>Alat</b><small>Support</small></div>
+        </div>
+      </div>
+      <div class="cta">Lihat Paket Kemitraan</div>
+    </div></div>
+    <div class="cap">7. Franchise — Landing<span>Benefit kemitraan</span></div>
+    </div>
+
+    <div>
+    <div class="phone"><div class="screen">
+      <div class="sbar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="topgreen"><div class="nm">← Paket Kemitraan</div></div>
+      <div class="body">
+        <div class="flabel">Pilih Paket</div>
+        <div class="pkg"><div class="nm">Starter</div><div class="pr">Rp 25 Juta</div><ul><li>2 mesin cuci</li><li>App customer</li><li>Branding & banner</li></ul></div>
+        <div class="pkg hot"><div class="rib">TERLARIS</div><div class="nm">Pro</div><div class="pr">Rp 55 Juta</div><ul><li>5 mesin + dryer</li><li>App + POS kasir</li><li>Training 3 hari</li><li>Marketing kit</li></ul></div>
+        <div class="pkg"><div class="nm">Master</div><div class="pr">Rp 120 Juta</div><ul><li>Full outlet siap ops</li><li>Territory eksklusif</li></ul></div>
+      </div>
+      <div class="cta">Ajukan Jadi Mitra</div>
+    </div></div>
+    <div class="cap">8. Paket Franchise<span>Tiga tier kemitraan</span></div>
+    </div>
+
+    <div>
+    <div class="phone"><div class="screen">
+      <div class="sbar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="topgreen"><div class="nm">← Formulir Mitra</div></div>
+      <div class="body">
+        <div class="flabel">Data Calon Mitra</div>
+        <div class="addr"><div class="dot p">👤</div><div class="tx"><b>Nama Lengkap</b><small>Ihza Pratama</small></div></div>
+        <div class="addr"><div class="dot p">📞</div><div class="tx"><b>No. WhatsApp</b><small>0822-xxxx-xxxx</small></div></div>
+        <div class="addr"><div class="dot p">📍</div><div class="tx"><b>Kota Lokasi</b><small>Jambi</small></div></div>
+        <div class="addr"><div class="dot d">📦</div><div class="tx"><b>Paket Dipilih</b><small>Pro — Rp 55 Juta</small></div></div>
+        <div class="banner" style="margin-top:8px"><b>Tim kami hubungi &lt;24 jam</b><small>Konsultasi gratis, no pressure</small></div>
+      </div>
+      <div class="cta">Kirim Pengajuan</div>
+    </div></div>
+    <div class="cap">9. Form Kemitraan<span>Submit → tim follow-up</span></div>
+    </div>
+
+  </div>
+
+  <div class="note">Mr Spin Laundry — Mockup Webapp Customer (Laundry Kiloan, checkout gaya Grab) + Menu Franchise • by Azhi Tech</div>
+
+</div>
+</body>
+</html>
