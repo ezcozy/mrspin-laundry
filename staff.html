@@ -2,39 +2,63 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mr Spin Laundry — Staff Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Mr Spin Laundry — Portal Internal</title>
 <script src="store.js"></script>
 <style>
   :root{ --y:#FFC400; --yl:#fff7d6; --ink:#1a1a1a; --gray:#8a8577; --line:#eee9d8; --bg:#faf7ef; --dark:#111; }
   *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent;}
   html,body{min-height:100%;background:#e0dbc8;}
   body{display:flex;justify-content:center;}
-  #app{width:100%;max-width:440px;min-height:100vh;background:var(--bg);display:flex;flex-direction:column;box-shadow:0 0 50px rgba(0,0,0,.22);font-size:14px;position:relative;}
+  #app{width:100%;max-width:440px;min-height:100dvh;background:var(--bg);display:flex;flex-direction:column;box-shadow:0 0 50px rgba(0,0,0,.22);font-size:14px;position:relative;}
   .hide{display:none!important;}
 
   /* LOGIN */
-  .login{flex:1;display:flex;flex-direction:column;justify-content:center;padding:30px 24px;background:linear-gradient(160deg,#111 0%,#222 55%,#1a1a1a 100%);color:#fff;min-height:100vh;}
+  .login{flex:1;display:flex;flex-direction:column;justify-content:center;padding:30px 24px;background:linear-gradient(160deg,#111 0%,#222 55%,#1a1a1a 100%);color:#fff;min-height:100dvh;}
   .login .logo{width:64px;height:64px;border-radius:16px;object-fit:cover;margin:0 auto 14px;display:block;box-shadow:0 6px 20px rgba(0,0,0,.4);}
   .login h1{text-align:center;font-size:20px;font-weight:800;color:var(--y);}
   .login .sub{text-align:center;font-size:12px;color:#aaa;margin:4px 0 26px;}
   .login label{font-size:12px;font-weight:700;color:#ccc;display:block;margin-bottom:6px;}
-  .login input,.login select{width:100%;background:#2b2b2b;border:1.5px solid #3a3a3a;border-radius:12px;padding:13px 14px;font-size:14px;color:#fff;margin-bottom:14px;}
-  .login input:focus,.login select:focus{outline:none;border-color:var(--y);}
+  .login input{width:100%;background:#2b2b2b;border:1.5px solid #3a3a3a;border-radius:12px;padding:13px 14px;font-size:14px;color:#fff;margin-bottom:14px;}
+  .login input:focus{outline:none;border-color:var(--y);}
   .login .btn{width:100%;background:var(--y);color:#111;border:none;padding:14px;border-radius:12px;font-weight:800;font-size:15px;cursor:pointer;margin-top:6px;}
   .login .btn:active{transform:scale(.98);}
+  .login .autonote{text-align:center;font-size:11px;color:#888;margin:2px 0 0;}
   .login .hint{margin-top:20px;background:#00000033;border-radius:12px;padding:12px 14px;font-size:11px;color:#bbb;line-height:1.7;}
   .login .hint b{color:var(--y);}
 
   /* TOPBAR */
-  .topbar{background:var(--y);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;}
+  .topbar{background:var(--y);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20;}
   .topbar .who{font-size:15px;font-weight:800;color:#111;}
   .topbar .role{font-size:10px;font-weight:800;opacity:.65;letter-spacing:.5px;}
   .topbar .out{background:rgba(0,0,0,.12);border:none;border-radius:20px;padding:7px 12px;font-size:11px;font-weight:800;cursor:pointer;color:#111;}
+  .backbar{background:#fff;border-bottom:1px solid var(--line);padding:11px 14px;display:flex;align-items:center;gap:10px;font-weight:800;font-size:14px;cursor:pointer;position:sticky;top:0;z-index:15;}
+  .backbar .bk{font-size:18px;}
+
   .tabs{display:flex;background:#fff;border-bottom:1px solid var(--line);}
   .tab{flex:1;text-align:center;padding:11px 4px;font-size:12px;font-weight:700;color:var(--gray);cursor:pointer;border-bottom:3px solid transparent;}
   .tab.on{color:#111;border-color:var(--y);}
-  .body{padding:14px;overflow-y:auto;flex:1;padding-bottom:24px;}
+  .body{padding:14px;overflow-y:auto;flex:1;padding-bottom:calc(24px + env(safe-area-inset-bottom));}
+
+  /* DASHBOARD (karyawan/owner home) */
+  .hello{padding:16px 16px 6px;}
+  .hello h2{font-size:19px;font-weight:800;}
+  .hello .shift{font-size:11.5px;color:var(--gray);margin-top:2px;}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 16px 4px;}
+  .stat{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:13px;}
+  .stat .n{font-size:24px;font-weight:800;line-height:1;}
+  .stat .l{font-size:11px;color:var(--gray);margin-top:5px;font-weight:600;}
+  .stat.hl{background:#111;} .stat.hl .n{color:var(--y);} .stat.hl .l{color:#ccc;}
+  .sechd{font-size:13px;font-weight:800;padding:14px 16px 6px;display:flex;justify-content:space-between;align-items:center;}
+  .sechd a{font-size:11.5px;color:#a35a00;font-weight:700;cursor:pointer;}
+
+  /* MENU GRID (owner + karyawan menu launcher) */
+  .menugrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;padding:14px 16px;}
+  .mtile{background:#fff;border:1.5px solid var(--line);border-radius:16px;padding:16px 13px;cursor:pointer;transition:transform .1s;}
+  .mtile:active{transform:scale(.97);}
+  .mtile .ic{width:42px;height:42px;border-radius:12px;background:var(--yl);display:flex;align-items:center;justify-content:center;font-size:21px;margin-bottom:9px;}
+  .mtile .t{font-weight:800;font-size:13px;}
+  .mtile .d{font-size:10.5px;color:var(--gray);margin-top:3px;line-height:1.4;}
 
   /* CARDS shared */
   .card{background:#fff;border-radius:14px;padding:13px;border:1.5px solid var(--line);margin-bottom:10px;}
@@ -43,16 +67,80 @@
   .badge{font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px;background:var(--yl);color:#8a6d00;}
   .badge.pickup{background:#ffe4b8;color:#a35a00;}
   .badge.deliver{background:#d7f0e0;color:#0d7a45;}
+  .badge.proc{background:#dbe6ff;color:#2952a3;}
   .card .addr{font-size:12px;color:var(--gray);margin:2px 0;}
   .card .cust{font-size:12.5px;font-weight:700;margin-top:4px;}
+  .card.clk{cursor:pointer;}
   .btnrow{display:flex;gap:8px;margin-top:10px;}
   .btn{flex:1;padding:10px;border-radius:10px;border:none;font-weight:800;font-size:12.5px;cursor:pointer;}
   .btn.primary{background:#111;color:var(--y);}
   .btn.ghost{background:var(--yl);color:#8a6d00;}
+  .btn.full{width:100%;flex:none;}
   .empty{text-align:center;color:var(--gray);padding:40px 10px;font-size:13px;}
   .photobox{width:100%;height:80px;border-radius:10px;background:repeating-linear-gradient(45deg,#f0ede0,#f0ede0 10px,#e8e4d4 10px,#e8e4d4 20px);display:flex;align-items:center;justify-content:center;font-size:24px;margin-top:8px;color:#8a8577;}
 
-  /* OUTLET kanban */
+  /* DETAIL ORDER + STEPPER */
+  .dethd{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;}
+  .dethd .oid{font-size:16px;font-weight:800;}
+  .dethd .meta{font-size:12.5px;color:var(--gray);margin-top:4px;line-height:1.7;}
+  .dethd .row{display:flex;gap:8px;margin-top:10px;}
+  .dethd .row .chip{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;font-size:11.5px;font-weight:700;}
+  .stepper{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:8px 14px;margin-bottom:12px;}
+  .stepper .sthd{font-size:12px;font-weight:800;padding:6px 0;color:var(--gray);}
+  .step{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line);}
+  .step:last-child{border-bottom:none;}
+  .step .dot{width:26px;height:26px;border-radius:50%;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#999;flex-shrink:0;}
+  .step.done .dot{background:#0d7a45;color:#fff;}
+  .step.cur .dot{background:var(--y);color:#111;}
+  .step .lbl{font-size:13px;font-weight:700;}
+  .step.done .lbl{color:var(--gray);}
+  .step.cur .lbl{color:#111;}
+
+  /* NUMPAD (timbang) */
+  .weighthd{text-align:center;padding:18px 0 6px;}
+  .weighthd .val{font-size:44px;font-weight:800;color:#111;}
+  .weighthd .val .u{font-size:18px;color:var(--gray);margin-left:4px;}
+  .weighthd .sub{font-size:12px;color:var(--gray);margin-top:2px;}
+  .numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:14px;}
+  .numpad button{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:16px;font-size:22px;font-weight:800;cursor:pointer;}
+  .numpad button:active{background:var(--yl);}
+  .numpad button.del{color:#c0392b;}
+
+  /* RUTE */
+  .routeitem{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;}
+  .routeitem .num{width:30px;height:30px;border-radius:50%;background:var(--y);color:#111;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;}
+  .routeitem.deliver .num{background:#3ddc84;color:#063;}
+  .routeitem .info{flex:1;}
+  .routeitem .info .t{font-weight:800;font-size:13px;}
+  .routeitem .info .a{font-size:11.5px;color:var(--gray);margin-top:2px;}
+  .routeitem .km{font-size:11.5px;font-weight:800;color:#a35a00;}
+  .routesum{background:#111;color:var(--y);border-radius:14px;padding:14px;text-align:center;font-weight:800;font-size:13px;margin-top:6px;}
+
+  /* ABSENSI */
+  .clockbox{background:#111;border-radius:18px;padding:22px;text-align:center;color:#fff;margin-bottom:14px;}
+  .clockbox .big{font-size:40px;font-weight:800;color:var(--y);font-family:monospace;}
+  .clockbox .st{font-size:12px;color:#bbb;margin-top:4px;}
+  .clockbox .abtn{margin-top:16px;width:100%;padding:14px;border-radius:12px;border:none;font-weight:800;font-size:14px;cursor:pointer;}
+  .clockbox .abtn.in{background:var(--y);color:#111;}
+  .clockbox .abtn.out{background:#c0392b;color:#fff;}
+  .histrow{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;font-size:12.5px;}
+  .histrow .d{font-weight:700;} .histrow .h{color:var(--gray);}
+  .kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+  .kpi .k{background:var(--yl);border-radius:12px;padding:13px;text-align:center;}
+  .kpi .k .n{font-size:22px;font-weight:800;color:#8a6d00;} .kpi .k .l{font-size:10.5px;color:#a35a00;margin-top:3px;font-weight:700;}
+
+  /* OWNER dashboard extras */
+  .omzet{background:linear-gradient(135deg,#111,#333);border-radius:18px;padding:18px;color:#fff;margin-bottom:14px;}
+  .omzet .lbl{font-size:11.5px;color:#bbb;}
+  .omzet .big{font-size:30px;font-weight:800;color:var(--y);margin-top:4px;}
+  .omzet .sub{font-size:11px;color:#9c9;margin-top:6px;}
+  .listrow{background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;}
+  .listrow .l{font-weight:700;font-size:13px;} .listrow .s{font-size:11px;color:var(--gray);margin-top:2px;}
+  .listrow .r{font-weight:800;font-size:13px;}
+  .bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin-top:8px;}
+  .bar span{display:block;height:100%;background:var(--y);}
+
+  /* OUTLET kanban (operator) */
   .cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   .col{background:#fff;border-radius:12px;border:1.5px solid var(--line);min-height:120px;}
   .col h3{padding:9px 11px;font-size:11.5px;font-weight:800;border-bottom:1.5px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
@@ -66,7 +154,7 @@
 
   /* MONITOR */
   #app.monitormode{max-width:100%;background:#0a0a0a;}
-  .mon{background:#0a0a0a;color:#fff;min-height:100vh;display:flex;flex-direction:column;}
+  .mon{background:#0a0a0a;color:#fff;min-height:100dvh;display:flex;flex-direction:column;}
   .monhead{display:flex;justify-content:space-between;align-items:center;padding:18px 30px;background:linear-gradient(90deg,#111,#1a1a1a);border-bottom:3px solid var(--y);}
   .monhead .brand{display:flex;align-items:center;gap:12px;font-size:22px;font-weight:800;color:var(--y);}
   .monhead .clock{font-size:20px;font-weight:700;color:#eee;font-family:monospace;}
@@ -97,44 +185,40 @@
 <div class="flash" id="flash"></div>
 <div id="app">
 
-  <!-- LOGIN -->
+  <!-- LOGIN TERPADU -->
   <div class="login" id="loginScreen">
     <img src="logo.jpg" class="logo" alt="logo" onerror="this.style.display='none'">
-    <h1>Mr Spin — Staff Portal</h1>
-    <div class="sub">Login karyawan (Driver / Operator Outlet / Monitor)</div>
-    <label>Username Karyawan</label>
-    <input id="loginUser" placeholder="mis. budi / sari / monitor" autocomplete="off">
-    <label>Password</label>
+    <h1>Mr Spin — Portal Internal</h1>
+    <div class="sub">Login terpadu · menu menyesuaikan peran akun</div>
+    <label>Username / Email / No. HP</label>
+    <input id="loginUser" placeholder="mis. owner / budi / sari" autocomplete="off">
+    <label>Password / PIN</label>
     <input id="loginPass" type="password" placeholder="••••••" autocomplete="off">
-    <label>Login Sebagai</label>
-    <select id="loginRole">
-      <option value="driver">🚗 Driver / Kurir</option>
-      <option value="operator">🏪 Operator Outlet</option>
-      <option value="monitor">📺 Monitor Display</option>
-    </select>
     <button class="btn" id="btnLogin" type="button">Masuk</button>
+    <div class="autonote">🔐 Peran terdeteksi otomatis dari akun</div>
     <div class="hint">
       <b>Akun demo:</b><br>
-      Driver → <b>budi</b> / 123<br>
-      Operator → <b>sari</b> / 123<br>
-      Monitor → <b>monitor</b> / 123
+      👑 Owner → <b>owner</b> / 123<br>
+      👷 Karyawan → <b>budi</b> / 123 · <b>sari</b> / 123<br>
+      📺 Monitor Outlet → <b>monitor</b> / 123
     </div>
   </div>
 
-  <!-- APP SHELL (after login) -->
+  <!-- APP SHELL -->
   <div id="shell" class="hide" style="flex:1;display:flex;flex-direction:column;">
     <div class="topbar" id="topbar">
       <div><div class="who" id="whoName">-</div><div class="role" id="whoRole">-</div></div>
       <button class="out" onclick="doLogout()">Keluar ⏻</button>
     </div>
     <div class="tabs hide" id="driverTabs">
-      <div class="tab on" data-dtab="pickup" onclick="setDriverTab('pickup')">Jemput Baru</div>
-      <div class="tab" data-dtab="deliver" onclick="setDriverTab('deliver')">Antar Balik</div>
+      <div class="tab on" data-dtab="pickup" onclick="setDriverTab('pickup')">Jemput</div>
+      <div class="tab" data-dtab="proses" onclick="setDriverTab('proses')">Proses</div>
+      <div class="tab" data-dtab="deliver" onclick="setDriverTab('deliver')">Antar</div>
     </div>
     <div class="body" id="shellBody"></div>
   </div>
 
-  <!-- MONITOR MODE (full) -->
+  <!-- MONITOR MODE -->
   <div class="mon hide" id="monScreen">
     <div class="monhead">
       <div class="brand">🌀 MR SPIN <span style="font-size:13px;color:#999;font-weight:600;margin-left:6px" id="monOutlet">Outlet</span></div>
@@ -148,168 +232,6 @@
 
 </div>
 <div class="toast" id="toast"></div>
-
 <script src="staff.js"></script>
-<script>
-void 0;
-function fmt(f){ return String(f).replace('.', ','); }
-function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',1700); }
-function timeAgo(ts){ const m=Math.floor((Date.now()-ts)/60000); return m<1?'baru saja':m+' menit lalu'; }
-
-/* ---------- AUTH ---------- */
-function doLogin(){
-  const u = document.getElementById('loginUser').value.trim().toLowerCase();
-  const p = document.getElementById('loginPass').value.trim();
-  if(!u || !p){ showToast('Isi username & password dulu'); return; }
-  const acc = STAFF[u];
-  if(!acc || acc.pass !== p){ showToast('Username / password salah'); return; }
-  // Role otomatis dari akun (dropdown cuma info, gak wajib cocok)
-  session = {user:u, name:acc.name, role:acc.role};
-  try{ localStorage.setItem('mrspin_staff', JSON.stringify(session)); }catch(e){}
-  enterApp();
-}
-function doLogout(){
-  session = null;
-  try{ localStorage.removeItem('mrspin_staff'); }catch(e){}
-  document.getElementById('app').classList.remove('monitormode');
-  document.getElementById('monScreen').classList.add('hide');
-  document.getElementById('shell').classList.add('hide');
-  document.getElementById('loginScreen').classList.remove('hide');
-  document.getElementById('loginUser').value='';
-  document.getElementById('loginPass').value='';
-}
-function roleLabel(r){ return r==='driver'?'Driver / Kurir':r==='operator'?'Operator Outlet':'Monitor Display'; }
-
-function enterApp(){
-  document.getElementById('loginScreen').classList.add('hide');
-  if(session.role === 'monitor'){
-    document.getElementById('app').classList.add('monitormode');
-    document.getElementById('shell').classList.add('hide');
-    document.getElementById('monScreen').classList.remove('hide');
-    document.getElementById('monOutlet').textContent = OUTLET_NAME;
-    renderMonitor();
-    return;
-  }
-  document.getElementById('shell').classList.remove('hide');
-  document.getElementById('whoName').textContent = session.name;
-  document.getElementById('whoRole').textContent = roleLabel(session.role).toUpperCase() + ' • ' + OUTLET_NAME;
-  if(session.role === 'driver'){
-    document.getElementById('driverTabs').classList.remove('hide');
-    renderDriver();
-  } else {
-    document.getElementById('driverTabs').classList.add('hide');
-    renderOperator();
-  }
-}
-
-/* ---------- DRIVER ---------- */
-function setDriverTab(t){ driverTab=t; document.querySelectorAll('.tab').forEach(el=>el.classList.toggle('on', el.dataset.dtab===t)); renderDriver(); }
-function renderDriver(){
-  const el = document.getElementById('shellBody');
-  const all = Store.getAll();
-  const items = driverTab==='pickup' ? all.filter(o=>o.status==='menunggu_pickup') : all.filter(o=>o.status==='siap_kirim');
-  if(!items.length){ el.innerHTML = `<div class="empty">${driverTab==='pickup'?'Belum ada order baru untuk dijemput':'Belum ada cucian siap diantar'}</div>`; return; }
-  el.innerHTML = items.map(o=>{
-    if(driverTab==='pickup'){
-      return `<div class="card">
-        <div class="top"><div class="oid">#${o.id}</div><div class="badge pickup">Jemput ${timeAgo(o.createdAt)}</div></div>
-        <div class="cust">${esc(o.customer)} • ${esc(o.phone)}</div>
-        <div class="addr">📦 ${esc(o.pickupAddr)}</div>
-        <div class="addr">${esc(o.service)} • ${esc(o.outlet||'')}</div>
-        <div class="photobox" id="pf-${o.id}">${o.proofPickup?'✅ Foto tersimpan':'📸 Ambil foto bukti pickup'}</div>
-        <div class="btnrow">
-          <button class="btn ghost" onclick="takePhoto('${o.id}','pickup')">📷 Foto Bukti</button>
-          <button class="btn primary" onclick="doPickup('${o.id}')">✓ Sudah Dijemput</button>
-        </div></div>`;
-    }
-    return `<div class="card">
-      <div class="top"><div class="oid">#${o.id}</div><div class="badge deliver">Siap Diantar</div></div>
-      <div class="cust">${esc(o.customer)} • ${esc(o.phone)}</div>
-      <div class="addr">🏠 ${esc(o.deliverAddr)}</div>
-      <div class="addr">${esc(o.service)} • ${esc(o.outlet||'')}</div>
-      <div class="photobox" id="pf-${o.id}">${o.proofDeliver?'✅ Foto tersimpan':'📸 Ambil foto bukti antar'}</div>
-      <div class="btnrow">
-        <button class="btn ghost" onclick="takePhoto('${o.id}','deliver')">📷 Foto Bukti</button>
-        <button class="btn primary" onclick="doDeliver('${o.id}')">✓ Sudah Diantar</button>
-      </div></div>`;
-  }).join('');
-}
-function takePhoto(id,kind){ Store.update(id, kind==='pickup'?{proofPickup:true}:{proofDeliver:true}); showToast('Foto bukti berhasil diupload'); }
-function doPickup(id){ const o=Store.find(id); if(!o.proofPickup){ showToast('Wajib foto bukti dulu sebelum konfirmasi'); return; } Store.update(id,{status:'dijemput'}); showToast('Ditandai sudah dijemput → outlet dinotif'); renderDriver(); }
-function doDeliver(id){ const o=Store.find(id); if(!o.proofDeliver){ showToast('Wajib foto bukti antar dulu'); return; } Store.update(id,{status:'selesai'}); showToast('Pesanan selesai diantar'); renderDriver(); }
-
-/* ---------- OPERATOR ---------- */
-function renderOperator(){
-  const el = document.getElementById('shellBody');
-  el.innerHTML = `<div class="cols">
-    <div class="col"><h3>Menunggu Jemput <span class="cnt" id="c1">0</span></h3><div class="colbody" id="col1"></div></div>
-    <div class="col"><h3>Masuk Outlet <span class="cnt" id="c2">0</span></h3><div class="colbody" id="col2"></div></div>
-    <div class="col"><h3>Sedang Dicuci <span class="cnt" id="c3">0</span></h3><div class="colbody" id="col3"></div></div>
-    <div class="col"><h3>Siap Diantar <span class="cnt" id="c4">0</span></h3><div class="colbody" id="col4"></div></div>
-  </div>`;
-  fillOperator();
-}
-function opCard(o, label, action){
-  return `<div class="mini"><div class="oid">#${o.id}</div><div class="cust">${esc(o.customer)}</div><div class="svc">${esc(o.service)} • ${fmt(o.weight)}kg</div>${action?`<button onclick="${action}('${o.id}')">${label}</button>`:''}</div>`;
-}
-function fillOperator(){
-  const all = Store.getAll();
-  const c1=all.filter(o=>o.status==='menunggu_pickup'), c2=all.filter(o=>o.status==='dijemput'), c3=all.filter(o=>o.status==='proses_cuci'), c4=all.filter(o=>o.status==='siap_kirim');
-  const set=(id,v)=>{const e=document.getElementById(id); if(e) e.textContent=v;};
-  set('c1',c1.length);set('c2',c2.length);set('c3',c3.length);set('c4',c4.length);
-  const put=(id,arr,lbl,act,emp)=>{const e=document.getElementById(id); if(e) e.innerHTML=arr.length?arr.map(o=>opCard(o,lbl,act)).join(''):`<div class="emptc">${emp}</div>`;};
-  put('col1',c1,null,null,'Menunggu driver');
-  put('col2',c2,'Mulai Cuci →','startWash','Belum ada masuk');
-  put('col3',c3,'Selesai →','finishWash','Tidak ada');
-  put('col4',c4,null,null,'Menunggu driver antar');
-}
-function startWash(id){ Store.update(id,{status:'proses_cuci'}); showToast('Order #'+id+' mulai dicuci'); fillOperator(); }
-function finishWash(id){ Store.update(id,{status:'siap_kirim'}); showToast('#'+id+' siap dikirim → notif driver & monitor'); fillOperator(); }
-
-/* ---------- MONITOR ---------- */
-let lastCount = {p:0,d:0};
-function flash(){ const f=document.getElementById('flash'); f.classList.add('on'); setTimeout(()=>f.classList.remove('on'),400); }
-function renderMonitor(){
-  const all = Store.getAll();
-  const pickup = all.filter(o=>o.status==='menunggu_pickup').sort((a,b)=>a.createdAt-b.createdAt);
-  const deliver = all.filter(o=>o.status==='siap_kirim').sort((a,b)=>a.createdAt-b.createdAt);
-  if(pickup.length>lastCount.p || deliver.length>lastCount.d) flash();
-  lastCount = {p:pickup.length, d:deliver.length};
-  document.getElementById('monPickup').innerHTML = pickup.length ? pickup.map(o=>{
-    const mins=Math.floor((Date.now()-o.createdAt)/60000);
-    return `<div class="mrow ${mins>30?'urgent':''}"><div><div class="oid">#${o.id} — ${esc(o.customer)}</div><div class="meta">${esc(o.service)} • ${esc(o.pickupAddr)}</div></div><div class="agebadge">${timeAgo(o.createdAt)}</div></div>`;
-  }).join('') : '<div class="monempty">Tidak ada cucian menunggu dijemput</div>';
-  document.getElementById('monDeliver').innerHTML = deliver.length ? deliver.map(o=>`<div class="mrow"><div><div class="oid">#${o.id} — ${esc(o.customer)}</div><div class="meta">${esc(o.service)} • ${esc(o.deliverAddr)}</div></div><div class="agebadge">Siap Kirim</div></div>`).join('') : '<div class="monempty">Tidak ada cucian siap diantar</div>';
-}
-function tickClock(){ const e=document.getElementById('monClock'); if(e) e.textContent = new Date().toLocaleTimeString('id-ID'); }
-setInterval(tickClock,1000); tickClock();
-setInterval(()=>{ if(session && session.role==='monitor') renderMonitor(); }, 5000);
-
-/* ---------- LIVE REFRESH ---------- */
-function refreshCurrent(){
-  if(!session) return;
-  if(session.role==='driver') renderDriver();
-  else if(session.role==='operator') fillOperator();
-  else if(session.role==='monitor') renderMonitor();
-}
-
-/* ---------- expose handlers to global (GitHub Pages onclick safety) ---------- */
-window.doLogin=doLogin; window.doLogout=doLogout; window.setDriverTab=setDriverTab;
-window.takePhoto=takePhoto; window.doPickup=doPickup; window.doDeliver=doDeliver;
-window.startWash=startWash; window.finishWash=finishWash;
-
-/* ---------- BOOT ---------- */
-function boot(){
-  try{ if(typeof Store!=='undefined' && Store.seed){ Store.seed(); Store.subscribe(refreshCurrent); } }catch(e){ console.error('store init',e); }
-  // Bind login button (addEventListener, tidak bergantung onclick global)
-  var b=document.getElementById('btnLogin');
-  if(b) b.addEventListener('click', doLogin);
-  // Enter key di password submit
-  var pp=document.getElementById('loginPass');
-  if(pp) pp.addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
-  try{
-    const saved = JSON.parse(localStorage.getItem('mrspin_staff')||'null');
-    if(saved && STAFF[saved.user]){ session = saved; enterApp(); }
-  }catch(e){}
-}
-if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', boot); } else { boot(); }
+</body>
+</html>

@@ -67,10 +67,10 @@ const Store = {
     if (_read().length === 0) {
       const now = Date.now();
       _write([
-        { id: 'SPIN1042', customer: 'Budi Santoso', phone: '0812-3456-7890', service: 'Cuci Setrika', weight: 4.5, price: 31500, outlet: 'Outlet Merdeka', pickupAddr: 'Jl. Merdeka No.12, Jambi', deliverAddr: 'Jl. Merdeka No.12, Jambi', paid: true, status: 'menunggu_pickup', createdAt: now - 20 * 60000 },
-        { id: 'SPIN1041', customer: 'Sinta Dewi', phone: '0813-2211-8890', service: 'Express 6 Jam', weight: 2, price: 24000, outlet: 'Outlet Merdeka', pickupAddr: 'Jl. Sudirman No.5, Jambi', deliverAddr: 'Jl. Sudirman No.5, Jambi', paid: true, status: 'dijemput', createdAt: now - 55 * 60000 },
-        { id: 'SPIN1039', customer: 'Rian Hidayat', phone: '0821-9987-1122', service: 'Cuci Kering', weight: 6, price: 21000, outlet: 'Outlet Merdeka', pickupAddr: 'Jl. Gajah Mada No.7, Jambi', deliverAddr: 'Jl. Gajah Mada No.7, Jambi', paid: true, status: 'proses_cuci', createdAt: now - 120 * 60000 },
-        { id: 'SPIN1035', customer: 'Nadia Ayu', phone: '0852-4400-7712', service: 'Cuci Setrika', weight: 3, price: 21000, outlet: 'Outlet Merdeka', pickupAddr: 'Jl. Ahmad Yani No.9, Jambi', deliverAddr: 'Jl. Ahmad Yani No.9, Jambi', paid: true, status: 'siap_kirim', createdAt: now - 180 * 60000 }
+        { id: 'SPIN1042', customer: 'Budi Santoso', phone: '0812-3456-7890', service: 'Cuci Setrika', weight: 4.5, price: 31500, outlet: 'Outlet Merdeka', pickupAddr: 'Jl. Merdeka No.12, Jambi', deliverAddr: 'Jl. Merdeka No.12, Jambi', km: 1.2, paid: true, status: 'menunggu_pickup', createdAt: now - 20 * 60000 },
+        { id: 'SPIN1041', customer: 'Sinta Dewi', phone: '0813-2211-8890', service: 'Express 6 Jam', weight: 2, price: 24000, outlet: 'Outlet Merdeka', pickupAddr: 'Jl. Sudirman No.5, Jambi', deliverAddr: 'Jl. Sudirman No.5, Jambi', km: 2.8, paid: true, status: 'dijemput', createdAt: now - 55 * 60000 },
+        { id: 'SPIN1039', customer: 'Rian Hidayat', phone: '0821-9987-1122', service: 'Cuci Kering', weight: 6, price: 21000, outlet: 'Outlet Merdeka', pickupAddr: 'Jl. Gajah Mada No.7, Jambi', deliverAddr: 'Jl. Gajah Mada No.7, Jambi', km: 3.1, paid: true, status: 'proses_cuci', createdAt: now - 120 * 60000 },
+        { id: 'SPIN1035', customer: 'Nadia Ayu', phone: '0852-4400-7712', service: 'Cuci Setrika', weight: 3, price: 21000, outlet: 'Outlet Merdeka', pickupAddr: 'Jl. Ahmad Yani No.9, Jambi', deliverAddr: 'Jl. Ahmad Yani No.9, Jambi', km: 2.3, paid: true, status: 'siap_kirim', createdAt: now - 180 * 60000 }
       ]);
     }
   }
