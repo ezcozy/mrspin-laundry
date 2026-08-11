@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mr Spin Laundry — Monitor Outlet</title>
+<script src="store.js"></script>
+<style>
+  :root{ --y:#FFC400; --ink:#1a1a1a; }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;}
+  body{background:#0a0a0a;color:#fff;min-height:100vh;overflow:hidden;}
+  header{display:flex;justify-content:space-between;align-items:center;padding:22px 40px;background:linear-gradient(90deg,#111,#1a1a1a);border-bottom:3px solid var(--y);}
+  header .brand{display:flex;align-items:center;gap:14px;font-size:26px;font-weight:800;color:var(--y);}
+  header .clock{font-size:22px;font-weight:700;color:#eee;font-family:monospace;}
+  .wrap{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:30px 40px;}
+  .panel{background:#141414;border-radius:20px;border:2px solid #262626;overflow:hidden;}
+  .panel.pickup{border-color:#5a3d00;}
+  .panel.deliver{border-color:#00432a;}
+  .panel h2{padding:18px 24px;font-size:20px;font-weight:800;display:flex;align-items:center;gap:10px;}
+  .panel.pickup h2{background:#241a00;color:#ffb700;}
+  .panel.deliver h2{background:#00220f;color:#3ddc84;}
+  .rows{padding:14px;display:flex;flex-direction:column;gap:12px;max-height:70vh;overflow-y:auto;}
+  .row{background:#1e1e1e;border-radius:14px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;animation:pop .4s ease;border-left:5px solid var(--y);}
+  .panel.deliver .row{border-left-color:#3ddc84;}
+  @keyframes pop{ from{ transform:scale(.92); opacity:0; } to{ transform:scale(1); opacity:1; } }
+  .row .oid{font-size:19px;font-weight:800;}
+  .row .meta{font-size:13px;color:#999;margin-top:4px;}
+  .row .agebadge{font-size:13px;font-weight:800;padding:6px 14px;border-radius:20px;background:#ffb70022;color:#ffb700;}
+  .panel.deliver .row .agebadge{background:#3ddc8422;color:#3ddc84;}
+  .row.urgent .agebadge{background:#ff4d4d33;color:#ff6b6b;animation:blink 1s infinite;}
+  @keyframes blink{ 50%{ opacity:.4; } }
+  .empty{text-align:center;color:#555;padding:50px 20px;font-size:15px;}
+  .flash{position:fixed;inset:0;background:var(--y);opacity:0;pointer-events:none;transition:opacity .15s;z-index:50;}
+  .flash.on{opacity:.15;}
+</style>
+</head>
+<body>
+<div class="flash" id="flash"></div>
+<header>
+  <div class="brand">🌀 MR SPIN LAUNDRY <span style="font-size:14px;color:#999;font-weight:600;margin-left:8px">— Outlet Merdeka</span></div>
+  <div class="clock" id="clock">00:00:00</div>
+</header>
+<div class="wrap">
+  <div class="panel pickup">
+    <h2>📦 PERLU DIJEMPUT (Customer Sudah Bayar)</h2>
+    <div class="rows" id="pickupRows"></div>
+  </div>
+  <div class="panel deliver">
+    <h2>🚚 SIAP DIANTAR (Cucian Selesai)</h2>
+    <div class="rows" id="deliverRows"></div>
+  </div>
+</div>
+<script>
+function timeAgo(ts){ const m = Math.floor((Date.now()-ts)/60000); return m<1?'baru masuk':m+' menit lalu'; }
+let lastCount = { pickup:0, deliver:0 };
+
+function flash(){
+  const f = document.getElementById('flash');
+  f.classList.add('on');
+  setTimeout(()=>f.classList.remove('on'), 400);
+}
+
+function render(){
+  const all = Store.getAll();
+  const pickup = all.filter(o=>o.status==='menunggu_pickup').sort((a,b)=>a.createdAt-b.createdAt);
+  const deliver = all.filter(o=>o.status==='siap_kirim').sort((a,b)=>a.createdAt-b.createdAt);
+
+  if(pickup.length > lastCount.pickup || deliver.length > lastCount.deliver) flash();
+  lastCount = { pickup: pickup.length, deliver: deliver.length };
+
+  document.getElementById('pickupRows').innerHTML = pickup.length ? pickup.map(o=>{
+    const mins = Math.floor((Date.now()-o.createdAt)/60000);
+    return `<div class="row ${mins>30?'urgent':''}">
+      <div><div class="oid">#${o.id} — ${esc(o.customer)}</div><div class="meta">${esc(o.service)} • ${esc(o.pickupAddr)}</div></div>
+      <div class="agebadge">${timeAgo(o.createdAt)}</div>
+    </div>`;
+  }).join('') : '<div class="empty">Tidak ada cucian menunggu dijemput</div>';
+
+  document.getElementById('deliverRows').innerHTML = deliver.length ? deliver.map(o=>{
+    return `<div class="row">
+      <div><div class="oid">#${o.id} — ${esc(o.customer)}</div><div class="meta">${esc(o.service)} • ${esc(o.deliverAddr)}</div></div>
+      <div class="agebadge">Siap Kirim</div>
+    </div>`;
+  }).join('') : '<div class="empty">Tidak ada cucian siap diantar</div>';
+}
+function esc(s){ return String(s||'').replace(/[<>&"]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+
+function tickClock(){ document.getElementById('clock').textContent = new Date().toLocaleTimeString('id-ID'); }
+setInterval(tickClock,1000); tickClock();
+setInterval(render, 5000); // re-check age badges even without store events
+
+Store.seed();
+Store.subscribe(render);
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mr Spin Laundry — Outlet Dashboard</title>
+<script src="store.js"></script>
+<style>
+  :root{ --y:#FFC400; --yl:#fff7d6; --ink:#1a1a1a; --gray:#8a8577; --line:#eee9d8; --bg:#faf7ef; }
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;}
+  body{background:#f0ede2;min-height:100vh;}
+  header{background:#111;color:var(--y);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;}
+  header .ttl{font-weight:800;font-size:17px;}
+  header .sub{font-size:11px;color:#ccc;font-weight:600;}
+  .wrap{max-width:1100px;margin:0 auto;padding:20px;}
+  .cols{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  @media (max-width:900px){ .cols{grid-template-columns:repeat(2,1fr);} }
+  .col{background:#fff;border-radius:14px;border:1.5px solid var(--line);min-height:200px;}
+  .col h3{padding:12px 14px;font-size:13px;font-weight:800;border-bottom:1.5px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
+  .col h3 .cnt{background:var(--yl);color:#8a6d00;font-size:11px;padding:2px 8px;border-radius:10px;}
+  .colbody{padding:10px;display:flex;flex-direction:column;gap:8px;}
+  .card{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;}
+  .card .oid{font-weight:800;font-size:12.5px;}
+  .card .cust{font-size:11.5px;color:var(--gray);margin-top:2px;}
+  .card .svc{font-size:11px;color:#555;margin-top:4px;}
+  .card .weight{font-size:11px;color:var(--gray);}
+  .card button{margin-top:8px;width:100%;background:#111;color:var(--y);border:none;padding:7px;border-radius:8px;font-size:11.5px;font-weight:800;cursor:pointer;}
+  .card button:hover{opacity:.9;}
+  .empty{color:var(--gray);font-size:12px;text-align:center;padding:30px 10px;}
+  .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#111;color:var(--y);padding:10px 20px;border-radius:30px;font-size:13px;font-weight:700;z-index:99;box-shadow:0 6px 18px rgba(0,0,0,.3);display:none;}
+</style>
+</head>
+<body>
+<header>
+  <div><div class="ttl">🏪 Outlet Merdeka — Dashboard Operator</div><div class="sub">Kelola status cucian secara real-time</div></div>
+  <div class="sub" id="clock"></div>
+</header>
+<div class="wrap">
+  <div class="cols">
+    <div class="col"><h3>Menunggu Dijemput <span class="cnt" id="cnt1">0</span></h3><div class="colbody" id="col1"></div></div>
+    <div class="col"><h3>Dijemput / Masuk Outlet <span class="cnt" id="cnt2">0</span></h3><div class="colbody" id="col2"></div></div>
+    <div class="col"><h3>Sedang Dicuci <span class="cnt" id="cnt3">0</span></h3><div class="colbody" id="col3"></div></div>
+    <div class="col"><h3>Siap Diantar <span class="cnt" id="cnt4">0</span></h3><div class="colbody" id="col4"></div></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+function esc(s){ return String(s||'').replace(/[<>&"]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',1800); }
+function fmt(f){ return String(f).replace('.', ','); }
+
+function card(o, actionLabel, action){
+  return `<div class="card">
+    <div class="oid">#${o.id}</div>
+    <div class="cust">${esc(o.customer)} • ${esc(o.phone)}</div>
+    <div class="svc">${esc(o.service)}</div>
+    <div class="weight">${fmt(o.weight)} kg • ${esc(o.outlet||'')}</div>
+    ${action?`<button onclick="${action}('${o.id}')">${actionLabel}</button>`:''}
+  </div>`;
+}
+
+function render(){
+  const all = Store.getAll();
+  const c1 = all.filter(o=>o.status==='menunggu_pickup');
+  const c2 = all.filter(o=>o.status==='dijemput');
+  const c3 = all.filter(o=>o.status==='proses_cuci');
+  const c4 = all.filter(o=>o.status==='siap_kirim');
+
+  document.getElementById('cnt1').textContent = c1.length;
+  document.getElementById('cnt2').textContent = c2.length;
+  document.getElementById('cnt3').textContent = c3.length;
+  document.getElementById('cnt4').textContent = c4.length;
+
+  document.getElementById('col1').innerHTML = c1.length ? c1.map(o=>card(o,null,null)).join('') : '<div class="empty">Menunggu driver jemput</div>';
+  document.getElementById('col2').innerHTML = c2.length ? c2.map(o=>card(o,'Mulai Cuci →','startWash')).join('') : '<div class="empty">Belum ada cucian masuk</div>';
+  document.getElementById('col3').innerHTML = c3.length ? c3.map(o=>card(o,'Selesai, Siap Kirim →','finishWash')).join('') : '<div class="empty">Tidak ada yang diproses</div>';
+  document.getElementById('col4').innerHTML = c4.length ? c4.map(o=>card(o,null,null)).join('') : '<div class="empty">Menunggu driver antar</div>';
+}
+function startWash(id){ Store.update(id,{status:'proses_cuci'}); showToast('Order #'+id+' mulai dicuci'); render(); }
+function finishWash(id){ Store.update(id,{status:'siap_kirim'}); showToast('Order #'+id+' siap dikirim → notif driver'); render(); }
+
+function tickClock(){ document.getElementById('clock').textContent = new Date().toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'medium'}); }
+setInterval(tickClock,1000); tickClock();
+
+Store.seed();
+Store.subscribe(render);
+render();
+</script>
+</body>
+</html>

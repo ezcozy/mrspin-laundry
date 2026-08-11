@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Mr Spin Laundry — Webapp</title>
+<script src="store.js"></script>
 <style>
   :root{
     --y:#FFC400; --yl:#fff7d6; --ink:#1a1a1a; --gray:#8a8577; --line:#eee9d8; --bg:#faf7ef; --dark:#111;
@@ -147,12 +148,27 @@
 <body>
 <div id="app">
 
+  <!-- REGISTER -->
+  <div class="screen active" data-id="register">
+    <div class="topbar" style="padding-bottom:20px">
+      <div class="brandrow"><img src="logo.jpg" alt="logo"><span>MR SPIN LAUNDRY</span></div>
+      <div class="nm">Daftar Akun Baru</div>
+    </div>
+    <div class="body">
+      <div class="field"><label>Nama Lengkap</label><input id="rName" placeholder="Nama lengkap Anda"></div>
+      <div class="field"><label>No. WhatsApp</label><input id="rWa" placeholder="08xx-xxxx-xxxx"></div>
+      <div class="field"><label>Email</label><input id="rEmail" placeholder="email@contoh.com"></div>
+      <div class="banner"><b>Gratis Ongkir Jemput Pertama</b><small>Khusus member baru terdaftar</small></div>
+    </div>
+    <button class="cta" onclick="submitRegister()">Daftar & Lanjut</button>
+  </div>
+
   <!-- HOME -->
-  <div class="screen active" data-id="home">
+  <div class="screen" data-id="home">
     <div class="topbar">
       <div class="brandrow"><img src="logo.jpg" alt="logo"><span>MR SPIN LAUNDRY</span></div>
-      <div class="hi">📍 Antar ke • Jl. Merdeka No.12</div>
-      <div class="nm">Halo, Ihza 👋</div>
+      <div class="hi" id="homeOutletHi">📍 Pilih outlet terdekat</div>
+      <div class="nm" id="homeGreeting">Halo 👋</div>
       <div class="search">🔍 Cari layanan laundry…</div>
     </div>
     <div class="body">
@@ -163,10 +179,41 @@
     <button class="cta" onclick="goto('services')">Mulai Pesan Laundry</button>
   </div>
 
+  <!-- OUTLET SELECT -->
+  <div class="screen" data-id="outlet">
+    <div class="topbar"><div class="row1"><button class="back" onclick="back()">←</button><div class="ttl">Pilih Outlet Terdekat</div></div></div>
+    <div class="body" id="outletList"></div>
+    <button class="cta" onclick="goto('addr')">Lanjut</button>
+  </div>
+
+  <!-- ADDRESS -->
+  <div class="screen" data-id="addr">
+    <div class="topbar"><div class="row1"><button class="back" onclick="back()">←</button><div class="ttl">Alamat Jemput & Antar</div></div></div>
+    <div class="body">
+      <div class="map">
+        <div class="road" style="width:70%;top:40%;left:10%"></div>
+        <div class="road" style="width:5px;height:60%;top:20%;left:45%"></div>
+        <div class="pin" style="top:22%;left:30%">📍</div>
+        <div class="pin" style="top:55%;left:60%">🏠</div>
+      </div>
+      <div class="field"><label>📦 Alamat Jemput (Cucian Kotor)</label><input id="aPickup" placeholder="Jl. Merdeka No.12, Jambi" oninput="onAddrInput()"></div>
+      <div class="chip" id="sameAddr" onclick="toggleSameAddr()" style="display:inline-block;margin-bottom:12px">☑️ Alamat antar sama dengan jemput</div>
+      <div class="field" id="deliverField" style="display:none"><label>🏠 Alamat Antar (Cucian Bersih)</label><input id="aDeliver" placeholder="Jl. Merdeka No.12, Jambi"></div>
+    </div>
+    <button class="cta" onclick="goto('services')">Lanjut Pilih Layanan</button>
+  </div>
+
   <!-- SERVICES -->
   <div class="screen" data-id="services">
     <div class="topbar"><div class="row1"><button class="back" onclick="back()">←</button><div class="ttl">Pilih Layanan</div></div></div>
     <div class="body" id="serviceList"></div>
+    <button class="cta" onclick="goto('durasi')">Lanjut</button>
+  </div>
+
+  <!-- DURASI -->
+  <div class="screen" data-id="durasi">
+    <div class="topbar"><div class="row1"><button class="back" onclick="back()">←</button><div class="ttl">Pilih Durasi</div></div></div>
+    <div class="body" id="durasiList"></div>
     <button class="cta" onclick="goto('weight')">Lanjut</button>
   </div>
 
@@ -191,18 +238,12 @@
     <button class="cta" onclick="goto('pickup')">Lanjut ke Penjemputan</button>
   </div>
 
-  <!-- PICKUP -->
+  <!-- PICKUP (schedule) -->
   <div class="screen" data-id="pickup">
-    <div class="topbar"><div class="row1"><button class="back" onclick="back()">←</button><div class="ttl">Jemput & Antar</div></div></div>
+    <div class="topbar"><div class="row1"><button class="back" onclick="back()">←</button><div class="ttl">Jadwal Jemput</div></div></div>
     <div class="body">
-      <div class="map">
-        <div class="road" style="width:70%;top:40%;left:10%"></div>
-        <div class="road" style="width:5px;height:60%;top:20%;left:45%"></div>
-        <div class="pin" style="top:22%;left:30%">📍</div>
-        <div class="pin" style="top:55%;left:60%">🏠</div>
-      </div>
-      <div class="addr"><div class="dot">📦</div><div class="tx"><b>Alamat Jemput</b><small>Jl. Merdeka No.12, Kota Jambi</small></div></div>
-      <div class="addr"><div class="dot">🏠</div><div class="tx"><b>Alamat Antar</b><small>Sama dengan alamat jemput</small></div></div>
+      <div class="addr"><div class="dot">📦</div><div class="tx" id="pickupAddrPreview"><b>Alamat Jemput</b><small>-</small></div></div>
+      <div class="addr"><div class="dot">🏠</div><div class="tx" id="deliverAddrPreview"><b>Alamat Antar</b><small>-</small></div></div>
       <div class="sectitle">Jadwal Jemput</div>
       <div class="timeslot" id="slotList"></div>
     </div>
@@ -219,10 +260,30 @@
       <div class="sumline"></div>
       <div class="total"><span>Total</span><span id="totalVal">Rp 0</span></div>
       <div class="sectitle" style="margin-top:14px">Metode Bayar</div>
-      <div class="paycard sel" data-pay="ewallet" onclick="selPay(this)"><div class="ic">💳</div><b>GoPay / OVO / Dana</b><div class="radio"></div></div>
-      <div class="paycard" data-pay="cod" onclick="selPay(this)"><div class="ic">💵</div><b>Bayar di Tempat (COD)</b><div class="radio"></div></div>
+      <div class="paycard sel" data-pay="qris" onclick="selPay(this)"><div class="ic">🔲</div><b>QRIS (Scan & Bayar)</b><div class="radio"></div></div>
+      <div class="paycard" data-pay="tf" onclick="selPay(this)"><div class="ic">🏦</div><b>Transfer Antar Bank</b><div class="radio"></div></div>
     </div>
-    <button class="cta" id="orderBtn" onclick="placeOrder()">Buat Pesanan</button>
+    <button class="cta" id="orderBtn" onclick="placeOrder()">Bayar Sekarang</button>
+  </div>
+
+  <!-- PAYMENT (QRIS/TF simulation) -->
+  <div class="screen" data-id="payment">
+    <div class="topbar"><div class="row1"><button class="back" onclick="back()">←</button><div class="ttl">Pembayaran</div></div></div>
+    <div class="body" id="paymentBody"></div>
+  </div>
+
+  <!-- E-BILLING -->
+  <div class="screen" data-id="ebilling">
+    <div class="topbar"><div class="row1"><div class="ttl">E-Billing</div></div></div>
+    <div class="body">
+      <div class="success" style="padding:24px 4px">
+        <div class="ic">✅</div>
+        <h2>Pembayaran Berhasil</h2>
+        <p>E-billing cucian sudah diterbitkan. Outlet akan segera menjemput cucianmu.</p>
+      </div>
+      <div class="listitem" style="cursor:default;flex-direction:column;align-items:stretch" id="billingCard"></div>
+    </div>
+    <button class="cta" onclick="goToTrackingFromBilling()">Lacak Pesanan</button>
   </div>
 
   <!-- TRACKING -->
@@ -234,6 +295,7 @@
       <div class="courier" id="courierCard" style="display:none">
         <div class="av">🧑🔧</div><div><b>Budi — Kurir</b><small>B 4521 SPN</small></div><div class="call">📞</div>
       </div>
+      <div id="proofPhotos"></div>
     </div>
     <button class="cta" onclick="goHome()">Hubungi Mr Spin</button>
   </div>
@@ -292,13 +354,23 @@
 <div class="toast" id="toast"></div>
 
 <script>
+const OUTLETS = [
+  {id:'merdeka', name:'Outlet Merdeka', addr:'Jl. Merdeka No.3, Jambi', dist:'0.8 km'},
+  {id:'sudirman', name:'Outlet Sudirman', addr:'Jl. Sudirman No.20, Jambi', dist:'2.1 km'},
+  {id:'thehok', name:'Outlet The Hok', addr:'Jl. Slamet Riyadi, Jambi', dist:'3.4 km'}
+];
 const SVC = {
-  'cuci-kering':{name:'Cuci Kering', price:5000, desc:'Cuci + kering, 2 hari', img:'img/cuci-kering.jpg'},
-  'cuci-setrika':{name:'Cuci Setrika', price:7000, desc:'Lengkap + wangi, 2 hari', img:'img/cuci-setrika.jpg'},
-  'setrika':{name:'Setrika Saja', price:4000, desc:'Rapi siap pakai, 1 hari', img:'img/setrika.jpg'},
-  'express':{name:'Express 6 Jam', price:12000, desc:'Kilat prioritas', img:'img/express.jpg'},
+  'cuci-kering-lipat':{name:'Cuci Kering Lipat', price:5000, desc:'Cuci + kering + lipat', img:'img/cuci-kering.jpg'},
+  'cuci-kering-gosok':{name:'Cuci Kering Gosok', price:7000, desc:'Cuci + kering + setrika', img:'img/cuci-setrika.jpg'},
+  'setrika':{name:'Setrika Saja', price:4000, desc:'Rapi siap pakai', img:'img/setrika.jpg'},
   'bedcover':{name:'Bed Cover & Selimut', price:15000, desc:'Cuci satuan', img:'img/bedcover.jpg'}
 };
+const DURASI = [
+  {id:'3hari', name:'3 Hari (Reguler)', extra:0},
+  {id:'2hari', name:'2 Hari (Cepat)', extra:2000},
+  {id:'1hari', name:'1 Hari (Kilat)', extra:5000},
+  {id:'express6', name:'Express 6 Jam', extra:12000}
+];
 const SLOTS = ['Hari ini 14–16','16–18 Sore','Besok Pagi 08–10'];
 const PKGS = [
   {id:'starter', nm:'Starter', pr:'Rp 25 Juta', items:['2 mesin cuci','App customer','Branding & banner']},
@@ -306,11 +378,12 @@ const PKGS = [
   {id:'master', nm:'Master', pr:'Rp 120 Juta', items:['Full outlet siap ops','Territory eksklusif']}
 ];
 
-let state = { service:'cuci-kering', weight:4.5, slot:0, pay:'ewallet', pkg:'pro' };
+let state = { name:'', wa:'', email:'', outlet:'merdeka', pickupAddr:'', deliverAddr:'', service:'cuci-kering-lipat', durasi:'3hari', weight:4.5, slot:0, pay:'qris', pkg:'pro' };
 let stack = [];
 
 function rp(n){ return 'Rp ' + Math.round(n).toLocaleString('id-ID'); }
 function fmt(f){ return String(f).replace('.', ','); }
+function esc(s){ return String(s||'').replace(/[<>&"]/g, c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
 
 function showToast(msg){
   const t = document.getElementById('toast');
@@ -324,7 +397,10 @@ function render(id){
   window.scrollTo(0,0);
   const body = document.querySelector(`.screen[data-id="${id}"] .body`);
   if(body) body.scrollTop = 0;
+  if(id==='outlet') renderOutlets();
+  if(id==='addr') renderAddr();
   if(id==='services') renderServices();
+  if(id==='durasi') renderDurasi();
   if(id==='weight') renderWeight();
   if(id==='pickup') renderPickup();
   if(id==='checkout') renderCheckout();
@@ -338,6 +414,17 @@ function currentId(){ return document.querySelector('.screen.active').dataset.id
 function goHome(){ stack=[]; render('home'); }
 function goFranchiseHome(){ stack=[]; render('franchise'); }
 
+// REGISTER
+function submitRegister(){
+  const name = document.getElementById('rName').value.trim();
+  const wa = document.getElementById('rWa').value.trim();
+  const email = document.getElementById('rEmail').value.trim();
+  if(!name || !wa){ showToast('Nama & WhatsApp wajib diisi'); return; }
+  state.name = name; state.wa = wa; state.email = email;
+  document.getElementById('homeGreeting').textContent = 'Halo, ' + name.split(' ')[0] + ' 👋';
+  stack=[]; render('home');
+}
+
 // HOME quick cards
 function renderHome(){
   const el = document.getElementById('homeServices');
@@ -347,7 +434,32 @@ function renderHome(){
       <b>${s.name}</b><div class="pr">${rp(s.price)}/kg</div>
     </div>`).join('');
 }
-function pickService(k){ state.service = k; goto('services'); }
+function pickService(k){ state.service = k; goto('outlet'); }
+
+function renderOutlets(){
+  const el = document.getElementById('outletList');
+  el.innerHTML = OUTLETS.map(o=>`
+    <div class="listitem ${state.outlet===o.id?'sel':''}" onclick="selectOutlet('${o.id}')">
+      <div class="radio" style="background:var(--yl);border:none">🏪</div>
+      <div class="tx"><b>${o.name}</b><small>${o.addr}</small></div>
+      <div class="pr">${o.dist}</div>
+      <div class="radio"></div>
+    </div>`).join('');
+}
+function selectOutlet(id){ state.outlet=id; renderOutlets(); }
+
+function renderAddr(){
+  document.getElementById('aPickup').value = state.pickupAddr;
+  document.getElementById('aDeliver').value = state.deliverAddr;
+}
+function onAddrInput(){ state.pickupAddr = document.getElementById('aPickup').value; }
+function toggleSameAddr(){
+  const f = document.getElementById('deliverField');
+  const chip = document.getElementById('sameAddr');
+  const same = f.style.display === 'none';
+  f.style.display = same ? 'block' : 'none';
+  chip.textContent = same ? '⬜ Alamat antar beda' : '☑️ Alamat antar sama dengan jemput';
+}
 
 function renderServices(){
   const el = document.getElementById('serviceList');
@@ -360,6 +472,17 @@ function renderServices(){
     </div>`).join('');
 }
 function selectService(k){ state.service=k; renderServices(); }
+
+function renderDurasi(){
+  const el = document.getElementById('durasiList');
+  el.innerHTML = DURASI.map(d=>`
+    <div class="listitem ${state.durasi===d.id?'sel':''}" onclick="selectDurasi('${d.id}')">
+      <div class="radio" style="background:var(--yl);border:none">⏱️</div>
+      <div class="tx"><b>${d.name}</b><small>${d.extra>0?'+'+rp(d.extra)+' biaya kilat':'Harga normal'}</small></div>
+      <div class="radio"></div>
+    </div>`).join('');
+}
+function selectDurasi(id){ state.durasi=id; renderDurasi(); }
 
 function renderWeight(){
   document.getElementById('wRange').value = state.weight;
@@ -381,22 +504,29 @@ function setW(v){
 function renderPickup(){
   const el = document.getElementById('slotList');
   el.innerHTML = SLOTS.map((s,i)=>`<div class="chip ${state.slot===i?'on':''}" onclick="selSlot(${i})">${s}</div>`).join('');
+  const pAddr = state.pickupAddr || 'Jl. Merdeka No.12, Jambi';
+  const dAddr = document.getElementById('deliverField')?.style.display === 'block' ? (state.deliverAddr || pAddr) : pAddr;
+  document.getElementById('pickupAddrPreview').innerHTML = `<b>Alamat Jemput</b><small>${esc(pAddr)}</small>`;
+  document.getElementById('deliverAddrPreview').innerHTML = `<b>Alamat Antar</b><small>${esc(dAddr)}</small>`;
 }
 function selSlot(i){ state.slot=i; renderPickup(); }
 
 function renderCheckout(){
   const s = SVC[state.service];
-  const subtotal = s.price * state.weight;
+  const d = DURASI.find(x=>x.id===state.durasi) || DURASI[0];
+  const subtotal = s.price * state.weight + d.extra;
   const discount = state.weight >= 3 ? subtotal * 0.3 : 0;
   const total = subtotal - discount;
-  document.getElementById('checkoutSvc').innerHTML = `<div class="radio" style="background:var(--yl);border:none">👕</div><div class="tx"><b>${s.name}</b><small>Estimasi ${fmt(state.weight)} kg • ${SLOTS[state.slot]}</small></div>`;
+  document.getElementById('checkoutSvc').innerHTML = `<div class="radio" style="background:var(--yl);border:none">👕</div><div class="tx"><b>${s.name}</b><small>${d.name} • Estimasi ${fmt(state.weight)} kg • ${SLOTS[state.slot]}</small></div>`;
   document.getElementById('checkoutSums').innerHTML = `
-    <div class="sumrow"><span>Subtotal (${fmt(state.weight)}kg)</span><span>${rp(subtotal)}</span></div>
+    <div class="sumrow"><span>Subtotal (${fmt(state.weight)}kg)</span><span>${rp(s.price*state.weight)}</span></div>
+    ${d.extra>0?`<div class="sumrow"><span>Biaya ${d.name}</span><span>${rp(d.extra)}</span></div>`:''}
     <div class="sumrow"><span>Ongkir jemput-antar</span><span>Rp 0</span></div>
     ${discount>0?`<div class="sumrow"><span>Diskon HEMAT30</span><span>− ${rp(discount)}</span></div>`:''}
   `;
   document.getElementById('totalVal').textContent = rp(total);
-  document.getElementById('orderBtn').textContent = `Buat Pesanan — ${rp(total)}`;
+  document.getElementById('orderBtn').textContent = `Bayar Sekarang — ${rp(total)}`;
+  state._total = total;
 }
 function selPay(el){
   document.querySelectorAll('.paycard').forEach(p=>p.classList.remove('sel'));
@@ -407,30 +537,103 @@ function selPay(el){
 let orderId = null;
 let trackTimer = null;
 function placeOrder(){
-  orderId = 'SPIN' + Math.floor(1000+Math.random()*9000);
-  showToast('Pesanan berhasil dibuat!');
-  goto('tracking');
-  startTracking();
+  goto('payment');
+  renderPayment();
 }
+function renderPayment(){
+  const total = state._total || 0;
+  const el = document.getElementById('paymentBody');
+  if(state.pay === 'qris'){
+    el.innerHTML = `
+      <div class="success" style="padding:20px 4px 8px">
+        <div style="width:180px;height:180px;margin:0 auto 14px;background:repeating-linear-gradient(45deg,#111 0 8px,#fff 8px 16px);border-radius:12px;border:6px solid #fff;box-shadow:0 4px 16px rgba(0,0,0,.15)"></div>
+        <h2>Scan QRIS untuk Bayar</h2>
+        <p>Total <b>${rp(total)}</b><br>Buka GoPay/OVO/Dana/m-Banking → Scan QR di atas</p>
+      </div>
+      <button class="cta" style="position:static;width:100%;margin-top:10px" onclick="confirmPayment()">Simulasikan Pembayaran Berhasil</button>`;
+  } else {
+    el.innerHTML = `
+      <div class="success" style="padding:20px 4px 8px">
+        <div class="ic">🏦</div>
+        <h2>Transfer Bank</h2>
+        <p>BCA <b>1234 5678 90</b> a.n Mr Spin Laundry<br>Total <b>${rp(total)}</b><br>Transfer sesuai nominal lalu konfirmasi.</p>
+      </div>
+      <button class="cta" style="position:static;width:100%;margin-top:10px" onclick="confirmPayment()">Sudah Transfer, Konfirmasi</button>`;
+  }
+}
+function confirmPayment(){
+  orderId = 'SPIN' + Math.floor(1000+Math.random()*9000);
+  const s = SVC[state.service];
+  const outlet = OUTLETS.find(o=>o.id===state.outlet) || OUTLETS[0];
+  const pAddr = state.pickupAddr || 'Jl. Merdeka No.12, Jambi';
+  const dAddr = state.deliverAddr || pAddr;
+  const order = {
+    id: orderId,
+    customer: state.name || 'Customer',
+    phone: state.wa || '-',
+    service: s.name,
+    weight: state.weight,
+    price: state._total || 0,
+    outlet: outlet.name,
+    pickupAddr: pAddr,
+    deliverAddr: dAddr,
+    slot: SLOTS[state.slot],
+    pay: state.pay,
+    paid: true,
+    status: 'menunggu_pickup',
+    createdAt: Date.now(),
+    proofPickup: null,
+    proofDeliver: null
+  };
+  if(window.Store) Store.add(order);
+  showToast('Pembayaran berhasil! Notifikasi terkirim ke outlet.');
+  goto('ebilling');
+  renderEbilling(order);
+}
+function renderEbilling(order){
+  document.getElementById('billingCard').innerHTML = `
+    <div class="sumrow"><span>No. Pesanan</span><b>#${order.id}</b></div>
+    <div class="sumrow"><span>Layanan</span><b>${esc(order.service)}</b></div>
+    <div class="sumrow"><span>Berat</span><b>${fmt(order.weight)} kg</b></div>
+    <div class="sumrow"><span>Outlet</span><b>${esc(order.outlet)}</b></div>
+    <div class="sumrow"><span>Jadwal Jemput</span><b>${esc(order.slot)}</b></div>
+    <div class="sumline"></div>
+    <div class="total"><span>Total Dibayar</span><span>${rp(order.price)}</span></div>
+  `;
+}
+function goToTrackingFromBilling(){ goto('tracking'); startTracking(); }
+
+const STATUS_ORDER = ['menunggu_pickup','dijemput','proses_cuci','siap_kirim','selesai'];
 const TSTEPS = [
-  {ic:'✓', t:'Pesanan Dibuat', d:()=>`${new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})} • checkout selesai`},
-  {ic:'✓', t:'Dijemput Kurir', d:()=>`${fmt(state.weight)} kg ditimbang`},
-  {ic:'🌀', t:'Sedang Dicuci', d:()=>'Estimasi selesai besok 12:00'},
-  {ic:'🚚', t:'Diantar Balik', d:()=>'Menunggu'},
-  {ic:'🏠', t:'Selesai', d:()=>'—'}
+  {key:'menunggu_pickup', ic:'✓', t:'Pesanan Dibuat', d:()=>`${new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})} • checkout selesai`},
+  {key:'dijemput', ic:'✓', t:'Dijemput Kurir', d:()=>`${fmt(state.weight)} kg ditimbang`},
+  {key:'proses_cuci', ic:'🌀', t:'Sedang Dicuci', d:()=>'Estimasi selesai sesuai durasi dipilih'},
+  {key:'siap_kirim', ic:'🚚', t:'Diantar Balik', d:()=>'Menunggu'},
+  {key:'selesai', ic:'🏠', t:'Selesai', d:()=>'—'}
 ];
 function startTracking(){
   document.getElementById('orderIdTxt').textContent = '#' + orderId;
-  document.getElementById('courierCard').style.display = 'none';
-  let step = 0;
-  if(trackTimer) clearInterval(trackTimer);
-  renderTrack(step);
-  trackTimer = setInterval(()=>{
-    step++;
-    if(step >= TSTEPS.length){ clearInterval(trackTimer); return; }
+  renderTrackFromStore();
+  if(window.Store){
+    Store.subscribe(()=>renderTrackFromStore());
+  } else if(!trackTimer){
+    // fallback demo animation if store.js missing
+    let step = 0;
     renderTrack(step);
-    if(step>=1) document.getElementById('courierCard').style.display='flex';
-  }, 3500);
+    trackTimer = setInterval(()=>{ step++; if(step>=TSTEPS.length){clearInterval(trackTimer);return;} renderTrack(step); }, 3500);
+  }
+}
+function renderTrackFromStore(){
+  if(!window.Store) return;
+  const order = Store.find(orderId);
+  if(!order) return;
+  const idx = STATUS_ORDER.indexOf(order.status);
+  renderTrack(idx);
+  document.getElementById('courierCard').style.display = idx>=1 ? 'flex' : 'none';
+  const photos = [order.proofPickup, order.proofDeliver].filter(Boolean);
+  document.getElementById('proofPhotos').innerHTML = photos.length ? `
+    <div class="sectitle">Bukti Foto Driver</div>
+    <div style="display:flex;gap:8px">${photos.map(p=>`<div style="flex:1;height:70px;border-radius:10px;background:linear-gradient(135deg,#fff2b8,#ffe27a);display:flex;align-items:center;justify-content:center;font-size:22px">📸</div>`).join('')}</div>` : '';
 }
 function renderTrack(activeIdx){
   const el = document.getElementById('trackSteps');
