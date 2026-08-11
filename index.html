@@ -44,7 +44,7 @@
   .topbar .nm{font-size:16px;font-weight:800;position:relative;z-index:2;}
   .search{background:#fff;border-radius:12px;padding:9px 12px;margin-top:10px;display:flex;align-items:center;gap:7px;color:var(--gray);font-size:12px;position:relative;z-index:2;}
 
-  .body{padding:14px 14px 84px;overflow-y:auto;flex:1;}
+  .body{padding:14px 14px 6px;overflow-y:auto;flex:1;}
   .banner{background:linear-gradient(120deg,#111,#2e2e2e);color:var(--y);border-radius:14px;padding:13px 14px;margin-bottom:14px;position:relative;overflow:hidden;}
   .banner b{font-size:14px;display:block;} .banner small{font-size:11px;opacity:.9;}
   .banner .pill{position:absolute;right:10px;top:10px;background:var(--y);color:#111;font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px;}
@@ -68,7 +68,7 @@
   .listitem.sel .radio,.paycard.sel .radio,.pkgcard.sel .radio{border-color:#111;background:#111;}
   .listitem.sel .radio::after,.paycard.sel .radio::after,.pkgcard.sel .radio::after{content:"";width:8px;height:8px;background:var(--y);border-radius:50%;}
 
-  .cta{background:#111;color:var(--y);text-align:center;padding:13px;border-radius:14px;font-weight:800;font-size:13.5px;box-shadow:0 6px 16px rgba(0,0,0,.22);border:none;width:calc(100% - 28px);position:fixed;bottom:12px;max-width:362px;cursor:pointer;}
+  .cta{background:#111;color:var(--y);text-align:center;padding:15px;border-radius:14px;font-weight:800;font-size:14px;box-shadow:0 6px 16px rgba(0,0,0,.18);border:none;display:block;width:calc(100% - 28px);margin:6px auto calc(14px + env(safe-area-inset-bottom));cursor:pointer;}
   .cta:active{transform:scale(.98);}
   .cta:disabled{opacity:.45;pointer-events:none;}
   .cta.ghost{background:var(--yl);color:#8a6d00;box-shadow:none;border:1.5px solid var(--y);}
@@ -157,8 +157,7 @@
   .navbtn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-weight:700;color:var(--gray);background:none;border:none;cursor:pointer;padding:4px;}
   .navbtn.on{color:#111;}
   .navbtn .ic{font-size:18px;}
-  .screen[data-id="home"] .body,.screen[data-id="franchise"] .body{padding-bottom:14px;}
-  .screen[data-id="home"] > .cta,.screen[data-id="franchise"] > .cta{position:static;width:calc(100% - 28px);margin:4px auto 14px;display:block;}
+  .screen[data-id="home"] .body,.screen[data-id="franchise"] .body{padding-bottom:6px;}
 
   .success{text-align:center;padding:60px 24px;}
   .success .ic{font-size:60px;margin-bottom:16px;}
@@ -177,8 +176,8 @@
       <img src="logo.jpg" class="wlogo" alt="logo" onerror="this.style.display='none'">
       <h1 class="wtitle">MR SPIN LAUNDRY</h1>
       <p class="wsub">Laundry antar-jemput, cepat & bersih.<br>Masuk atau daftar dulu yuk.</p>
-      <button class="cta" style="position:static;width:100%;margin:0 0 12px" onclick="goto('login')">Masuk</button>
-      <button class="cta ghost" style="position:static;width:100%;margin:0" onclick="goto('register')">Daftar Akun Baru</button>
+      <button class="cta" style="width:100%;max-width:340px;margin:0 auto 12px" onclick="goto('login')">Masuk</button>
+      <button class="cta ghost" style="width:100%;max-width:340px;margin:0 auto" onclick="goto('register')">Daftar Akun Baru</button>
       <div class="wstaff" onclick="location.href='staff.html'">👷 Login sebagai Karyawan / Staff</div>
     </div>
   </div>
@@ -195,7 +194,7 @@
       <div class="forgot">Lupa password?</div>
       <div class="banner"><b>Belum punya akun?</b><small>Klik "Daftar" di bawah untuk buat akun baru</small></div>
     </div>
-    <button class="cta" style="position:static;width:calc(100% - 28px);margin:4px auto 8px;display:block" onclick="submitLogin()">Masuk</button>
+    <button class="cta" onclick="submitLogin()">Masuk</button>
     <div class="switchauth" onclick="stack=['welcome'];render('register')">Belum punya akun? <b>Daftar</b></div>
   </div>
 
@@ -211,7 +210,7 @@
       <div class="field"><label>Email</label><input id="rEmail" placeholder="email@contoh.com"></div>
       <div class="banner"><b>Gratis Ongkir Jemput Pertama</b><small>Khusus member baru terdaftar</small></div>
     </div>
-    <button class="cta" style="position:static;width:calc(100% - 28px);margin:4px auto 8px;display:block" onclick="submitRegister()">Daftar & Lanjut</button>
+    <button class="cta" onclick="submitRegister()">Daftar & Lanjut</button>
     <div class="switchauth" onclick="stack=['welcome'];render('login')">Sudah punya akun? <b>Masuk</b></div>
   </div>
 
